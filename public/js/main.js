@@ -9,6 +9,7 @@ const listTasksComplated = document.querySelector(
 const buttonShowTaskComlated = document.querySelector(
   ".content_mytask-complate-title"
 );
+const formDetailTask = document.querySelector(".detail");
 const showDateNow = document.querySelector("#showDateNow");
 const date = new Date(); // ngày tháng năm hiện tại
 const buttonAddTask = document.querySelector("#add");
@@ -19,20 +20,32 @@ let day = "";
 let indexTask = 0;
 
 menu.onclick = () => {
-  sidebar.style.transform = "translateX(-100%)";
-  sidebar.style.transition = "all 0.6s linear";
-  content.style.left = "0";
-  content.style.width = "100%";
-  content.style.transition = "all 0.6s linear";
-  menu_hidden.classList.toggle("hidden");
+  if (
+    formDetailTask.classList.contains("show") &&
+    content.classList.contains("content-5")
+  ) {
+    content.classList.remove("content-5");
+    content.classList.add("content-7");
+  } else {
+    content.classList.add("content-10");
+  }
+  //  content.classList.add('content-')
+  sidebar.classList.add("hidden");
+  menu_hidden.classList.remove("hidden");
 };
 
 menu_hidden.onclick = () => {
-  sidebar.style.transform = "translateX(0)";
-  content.style.left = "20%";
-  content.style.width = "80%";
-  content.style.transition = "all 0.6s linear";
-  menu_hidden.classList.toggle("hidden");
+  if (
+    formDetailTask.classList.contains("show") &&
+    content.classList.contains("content-7")
+  ) {
+    content.classList.remove("content-7");
+    content.classList.add("content-5");
+  } else {
+    content.classList.remove("content-10");
+  }
+  sidebar.classList.remove("hidden");
+  menu_hidden.classList.add("hidden");
 };
 
 buttonShowTaskComlated.onclick = () => {
@@ -181,19 +194,41 @@ formAddTask.onsubmit = function (e) {
     playTinhTinh();
   }
 };
+const closeFormDetailTask = formDetailTask.querySelector(
+  ".detail_mytask-button>i"
+);
+
+const detailTaskTitle = formDetailTask.querySelector(".detail_mytask-title");
 
 function showDetailTask(event) {
   const taskElement = event.target;
-  console.log(taskElement);
   const taskTitle = taskElement.querySelector(".content_mytask-title");
-  console.log(taskTitle);
-  const formDetailTask = document.querySelector(".detail");
-  const detailTaskTitle = formDetailTask.querySelector(".detail_mytask-title");
-  console.log(detailTaskTitle);
   detailTaskTitle.textContent = taskTitle.textContent;
+
+  if (
+    sidebar.classList.contains("hidden") &&
+    content.classList.contains("content-10")
+  ) {
+    content.classList.remove("content-10");
+    content.classList.add("content-7");
+  } else {
+    content.classList.add("content-5");
+  }
+
   formDetailTask.classList.add("show");
-  const closeFormDetailTask = document.querySelector(".detail_mytask-button>i");
-  closeFormDetailTask.onclick = () => {
-    formDetailTask.classList.remove("show");
-  };
+  closeFormDetailTask.addEventListener("click", hiddenDetailTask);
+}
+
+function hiddenDetailTask() {
+  if (
+    !sidebar.classList.contains("hidden") &&
+    content.classList.contains("content-5")
+  ) {
+    content.classList.remove("content-5");
+  } else {
+    content.classList.remove("content-7");
+    content.classList.add("content-10");
+  }
+  formDetailTask.classList.remove("show");
+  closeFormDetailTask.removeEventListener("click", hiddenDetailTask);
 }
