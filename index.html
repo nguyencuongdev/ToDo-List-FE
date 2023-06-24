@@ -14,7 +14,7 @@
      -->
     <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css'>
     <link rel="stylesheet" href="./public/css/style.css">
-    <title>Document</title>
+    <title>My task</title>
 </head>
 
 <body>
@@ -90,7 +90,7 @@
                     <form class="content_groud-add" action="" method="post" id="form-add-task">
                         <div class="content_groud-add-tilte">
                             <i class="fi fi-rr-circle"></i>
-                            <input type="text" placeholder="Thêm tác vụ" name="name" autocomplete="off" id="input_task">
+                            <input autocomplete="off" id="input_task" name="name" placeholder="Thêm tác vụ" type="text">
                         </div>
                         <div class="content_groud-addd-button">
                             <div>
@@ -103,17 +103,27 @@
                 <div class="content_mytask">
                     <div class="content_mytask-list">
                         <!-- <div class="content_mytask-item">
-                                <div class="content_mytask-group">
-                                    <a href="" id="updatefinish" onclick="updatefinish(event)">
-                                        <i class="fi fi-rr-circle" id="finish-icon"></i>
-                                    </a>
-                                    <h4 class="content_mytask-title">Công việc 7</h4>
-                                </div>
-                                <div title="Đánh dấu công việc quan trọng">
-                                    <i class="fi fi-rr-star" id="important"></i>
-                                    <img src="./public/imgs/star.png" class="hidden" id="noimportant" alt="">
-                                </div>
-                            </div> -->
+                            <div class="content_mytask-group">
+                                <a href="" id="updatefinish" onclick="updatefinish(event)">
+                                    <i class="fi fi-rr-circle" id="finish-icon"></i>
+                                </a>
+                                <h4 class="content_mytask-title">Công việc 7</h4>
+                            </div>
+                            <div title="Đánh dấu công việc quan trọng">
+                                <i class="fi fi-rr-star" id="important"></i>
+                                <img src="./public/imgs/star.png" class="hidden" id="noimportant" alt="">
+                            </div>
+                            <div class="content_mytask-item-button">
+                                <a href="" class="content_mytask-button-item edit" onclick="editTask(event)">
+                                    Sửa task
+                                    <i class="fi fi-rr-edit"></i>
+                                </a>
+                                <a href="" class="content_mytask-button-item delete" onclick="deleteTask(event)">
+                                    Xóa task
+                                    <i class="fi fi-rr-trash"></i>
+                                </a>
+                            </div>
+                        </div> -->
                     </div>
                     <div class="content_mytask-complate">
                         <div class="content_mytask-complate-title">
@@ -184,7 +194,7 @@
                     </form>
                 </div>
                 <div class="detail_mytask-button">
-                    <i class="fi fi-rr-angle-double-small-left"></i>
+                    <i class="fi fi-rr-angle-double-small-right"></i>
                     <h3>Đã tạo ngày hôm nay</h3>
                     <button class="detail_mytask-button-item"><i class="fi fi-rr-trash"></i></button>
                 </div>

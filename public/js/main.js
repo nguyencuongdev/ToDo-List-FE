@@ -29,7 +29,6 @@ menu.onclick = () => {
   } else {
     content.classList.add("content-10");
   }
-  //  content.classList.add('content-')
   sidebar.classList.add("hidden");
   menu_hidden.classList.remove("hidden");
 };
@@ -110,13 +109,24 @@ function addTask(task) {
                                 <a href="" id="updatefinish"  onclick="updatefinish(event)">
                                     <i class="fi fi-rr-circle" id="finish-icon"></i>
                                 </a>
-                                <h4 class="content_mytask-title">${task.value}</h4>
+                                <h4 class="content_mytask-title" onclick=" event.stopPropagation();">${task.value}</h4>
                             </div>
                             <div title="Đánh dấu công việc quan trọng">
                                 <i class="fi fi-rr-star" id="important" onclick="important(event)"></i>
                                 <img src="./public/imgs/star.png" onclick="noImportant(event)" class="hidden" id="noimportant" alt="">
+                            </div>
+                             <div class="content_mytask-item-button">
+                                <a href="" class="content_mytask-button-item edit" onclick="editTask(event)">
+                                    Sửa task
+                                    <i class="fi fi-rr-edit"></i>
+                                </a>
+                                <a href="" class="content_mytask-button-item delete" onclick="deleteTask(event)">
+                                    Xóa task
+                                    <i class="fi fi-rr-trash"></i>
+                                </a>
                             </div>`;
   myTaskItem.addEventListener("click", showDetailTask);
+  myTaskItem.addEventListener("contextmenu", showButtonTask);
   indexTask++;
   task.value = "";
   myTaskList.prepend(myTaskItem);
@@ -168,22 +178,24 @@ function removeTaskComplated(element) {
 
 function updatefinish(event) {
   event.preventDefault();
-  let elementParent = event.target.parentNode;
-  while (!elementParent.classList.contains("content_mytask-item")) {
-    elementParent = elementParent.parentNode;
+  event.stopPropagation();
+  let elementTask = event.target.parentNode;
+  while (!elementTask.classList.contains("content_mytask-item")) {
+    elementTask = elementTask.parentNode;
   }
-  addTaskFinished(elementParent);
-  elementParent.remove();
+  addTaskFinished(elementTask);
+  elementTask.remove();
 }
 
 function updateTaskNotFinish(event) {
   event.preventDefault();
-  let elementParent = event.target.parentNode;
-  while (!elementParent.classList.contains("content_mytask-item")) {
-    elementParent = elementParent.parentNode;
+  event.stopPropagation();
+  let elementTask = event.target.parentNode;
+  while (!elementTask.classList.contains("content_mytask-item")) {
+    elementTask = elementTask.parentNode;
   }
-  removeTaskComplated(elementParent);
-  elementParent.remove();
+  removeTaskComplated(elementTask);
+  elementTask.remove();
 }
 
 formAddTask.onsubmit = function (e) {
@@ -191,7 +203,6 @@ formAddTask.onsubmit = function (e) {
   const inputTaskElement = document.querySelector("#input_task");
   if (inputTaskElement.value) {
     addTask(inputTaskElement);
-    playTinhTinh();
   }
 };
 const closeFormDetailTask = formDetailTask.querySelector(
@@ -232,3 +243,19 @@ function hiddenDetailTask() {
   formDetailTask.classList.remove("show");
   closeFormDetailTask.removeEventListener("click", hiddenDetailTask);
 }
+
+function showButtonTask(event) {
+  event.preventDefault();
+  const taskElement = event.target;
+  console.log(taskElement);
+  const buttonTask = taskElement.querySelector(".content_mytask-item-button");
+  buttonTask.style.display = "block";
+  function hiddenButtonTask() {
+    buttonTask.style.display = "none";
+    console.log("Hi");
+  }
+  window.addEventListener("click", hiddenButtonTask);
+}
+window.removeEventListener("click", hiddenDetailTask);
+
+window.addEventListener("click", function () {});
