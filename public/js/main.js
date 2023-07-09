@@ -57,7 +57,8 @@ function ShowTaskFinished() {
 
 function noImportant(event) {
   event.stopPropagation();
-  const buttonNoImportant = event.target;
+  let buttonNoImportant = event.target;
+  buttonNoImportant = buttonNoImportant.parentNode;
   const buttonImportant =
     buttonNoImportant.parentNode.querySelector("#important");
   if (buttonImportant.classList.contains("hidden")) {
@@ -67,7 +68,8 @@ function noImportant(event) {
 }
 function important(event) {
   event.stopPropagation();
-  const buttonImportant = event.target;
+  let buttonImportant = event.target;
+  buttonImportant = buttonImportant.parentNode;
   const buttonNoImportant =
     buttonImportant.parentNode.querySelector("#noimportant");
   if (buttonNoImportant.classList.contains("hidden")) {
@@ -76,14 +78,13 @@ function important(event) {
   }
 }
 function ShowDayNow() {
-  if (date.getDay() == 7) {
+  if (date.getDay() == 0) {
     day = "Chủ nhật";
   } else {
     day = "Thứ " + (date.getDay() + 1);
   }
-  showDateNow.textContent = `${day}, ngày ${date.getDate()} tháng ${
-    date.getMonth() + 1
-  }, năm ${date.getFullYear()}`;
+  showDateNow.textContent = `${day}, ngày ${date.getDate()} tháng ${date.getMonth() + 1
+    }, năm ${date.getFullYear()}`;
 }
 ShowDayNow();
 
@@ -106,24 +107,29 @@ function addTask(task) {
   myTaskItem.setAttribute("data-index", indexTask);
   myTaskItem.classList.add("content_mytask-item");
   myTaskItem.innerHTML = `  <div class="content_mytask-group">
-                                <a href="" id="updatefinish"  onclick="updatefinish(event)">
+                                <button id="updatefinish" onclick="updatefinish(event)">
                                     <i class="fi fi-rr-circle" id="finish-icon"></i>
-                                </a>
+                                </button>
                                 <h4 class="content_mytask-title" onclick=" event.stopPropagation();">${task.value}</h4>
                             </div>
                             <div title="Đánh dấu công việc quan trọng">
-                                <i class="fi fi-rr-star" id="important" onclick="important(event)"></i>
-                                <img src="./public/imgs/star.png" onclick="noImportant(event)" class="hidden" id="noimportant" alt="">
+                               <button id="important" onclick="important(event)">
+                                   <i class="fi fi-rr-star"></i>
+                                </button>
+                                <button id="noimportant" class="hidden" onclick="noImportant(event)">
+                                    <img src="./public/imgs/star.png">
+                                </button>
                             </div>
                              <div class="content_mytask-item-button">
-                                <a href="" class="content_mytask-button-item edit" onclick="editTask(event)">
+                                <button class="content_mytask-button-item edit" onclick="editTask(event)">
                                     Sửa task
                                     <i class="fi fi-rr-edit"></i>
-                                </a>
-                                <a href="" class="content_mytask-button-item delete" onclick="deleteTask(event)">
+                                </button>
+                                <button class="content_mytask-button-item delete" onclick="deleteTask(event)">
                                     Xóa task
                                     <i class="fi fi-rr-trash"></i>
-                                </a>
+                                </button>
+                                </div>
                             </div>`;
   myTaskItem.addEventListener("click", showDetailTask);
   myTaskItem.addEventListener("contextmenu", showButtonTask);
@@ -140,35 +146,69 @@ function addTaskFinished(element) {
   const myTaskItem = document.createElement("div");
   myTaskItem.classList.add("content_mytask-item");
   myTaskItem.innerHTML = `  <div class="content_mytask-group">
-                                    <a href="" id="not-update-finish" onclick="updateTaskNotFinish(event)">
-                                        <img src="./public/imgs/check-circle.png" alt="">
-                                    </a>
-                                    <h4 class="content_mytask-title">${task.textContent}</h4>
-                                    </div>
-                                    <i class="fi fi-rr-star" id="important" onclick="important(event)"></i>
-                                    <img src="./public/imgs/star.png" class="hidden" 
-                                    onclick="noImportant(event)" id="noimportant" alt="">
-                                    `;
+                               <button id="not-update-finish" onclick="updateTaskNotFinish(event)">
+                                   <img src="./public/imgs/check-circle.png" alt="">
+                                </button>
+                                 <h4 class="content_mytask-title" onclick=" event.stopPropagation();">${task.textContent}</h4>
+                            </div>
+                            <div title="Đánh dấu công việc quan trọng">
+                               <button id="important" onclick="important(event)">
+                                   <i class="fi fi-rr-star"></i>
+                                </button>
+                                <button id="noimportant" class="hidden" onclick="noImportant(event)">
+                                    <img src="./public/imgs/star.png">
+                                </button>
+                            </div>
+                             <div class="content_mytask-item-button">
+                                <button class="content_mytask-button-item edit" onclick="editTask(event)">
+                                    Sửa task
+                                    <i class="fi fi-rr-edit"></i>
+                                </button>
+                                <button class="content_mytask-button-item delete" onclick="deleteTask(event)">
+                                    Xóa task
+                                    <i class="fi fi-rr-trash"></i>
+                                </button>
+                                </div>
+                            </div>`;
   myTaskCompleted.prepend(myTaskItem);
   listTasksComplated.classList.remove("hidden");
+  myTaskItem.addEventListener("click", showDetailTask);
+  myTaskItem.addEventListener("contextmenu", showButtonTask);
   playTinhTinh();
 }
 
-function addTaskNotFinish(task) {
+function addTaskNotFinish(element) {
+  const task = element.querySelector(".content_mytask-title");
   const myTaskList = document.querySelector(".content_mytask-list");
   const myTaskItem = document.createElement("div");
   myTaskItem.classList.add("content_mytask-item");
   myTaskItem.innerHTML = `  <div class="content_mytask-group">
-                                <a href="" id="updatefinish"  onclick="updatefinish(event)">
+                                <button id="updatefinish"  onclick="updatefinish(event)">
                                     <i class="fi fi-rr-circle" id="finish-icon"></i>
-                                </a>
+                                </button>
                                 <h4 class="content_mytask-title">${task.textContent}</h4>
                             </div>
                             <div title="Đánh dấu công việc quan trọng">
-                                <i class="fi fi-rr-star" id="important" onclick="important(event)"></i>
-                                <img src="./public/imgs/star.png" class="hidden" onclick="noImportant(event)" id="noimportant" alt="">
+                               <button id="important" onclick="important(event)">
+                                   <i class="fi fi-rr-star"></i>
+                                </button>
+                                <button id="noimportant" class="hidden" onclick="noImportant(event)">
+                                    <img src="./public/imgs/star.png">
+                                </button>
+                            </div>
+                             <div class="content_mytask-item-button">
+                                <button class="content_mytask-button-item edit" onclick="editTask(event)">
+                                    Sửa task
+                                    <i class="fi fi-rr-edit"></i>
+                                </button>
+                                <button class="content_mytask-button-item delete" onclick="deleteTask(event)">
+                                    Xóa task
+                                    <i class="fi fi-rr-trash"></i>
+                                </button>
+                                </div>
                             </div>`;
-  task.value = "";
+  myTaskItem.addEventListener("click", showDetailTask);
+  myTaskItem.addEventListener("contextmenu", showButtonTask);
   myTaskList.prepend(myTaskItem);
 }
 
@@ -198,7 +238,7 @@ function updateTaskNotFinish(event) {
   elementTask.remove();
 }
 
-formAddTask.onsubmit = function (e) {
+formAddTask.onsubmit = async function (e) {
   e.preventDefault();
   const inputTaskElement = document.querySelector("#input_task");
   if (inputTaskElement.value) {
@@ -244,6 +284,17 @@ function hiddenDetailTask() {
   closeFormDetailTask.removeEventListener("click", hiddenDetailTask);
 }
 
+async function editTask(event) {
+  event.stopPropagation();
+  const formUpdate = document.querySelector("#form-update");
+  formUpdate.classList.add("show");
+}
+
+async function deleteTask(event) {
+  event.stopPropagation();
+  console.log(event.target);
+}
+
 function showButtonTask(event) {
   event.preventDefault();
   const taskElement = event.target;
@@ -252,10 +303,9 @@ function showButtonTask(event) {
   buttonTask.style.display = "block";
   function hiddenButtonTask() {
     buttonTask.style.display = "none";
-    console.log("Hi");
   }
   window.addEventListener("click", hiddenButtonTask);
 }
 window.removeEventListener("click", hiddenDetailTask);
 
-window.addEventListener("click", function () {});
+window.addEventListener("click", function () { });
