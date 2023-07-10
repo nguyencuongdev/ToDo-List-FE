@@ -18,7 +18,7 @@ const formAddTask = document.querySelector('#form-add-task');
 const audio = new Audio('/public/audios/tinhtinh.mp4');
 
 let day = '';
-let indexTask = 1;
+let indexTask = 0;
 
 menu.onclick = () => {
     if (
@@ -182,24 +182,27 @@ function updateTaskNotFinish(event) {
 
 formAddTask.onsubmit = async function (e) {
     e.preventDefault();
-    const inputTaskElement = document.querySelector('#input_task');
-    if (inputTaskElement.value) {
-        createTask(myTaskList, indexTask, inputTaskElement.value);
-        const formTask = new FormData(this);
-        const task = {
-            id: indexTask,
-            name: formTask.get('name'),
-            description: '',
-            important: false,
-            status: false,
-        };
-        await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(task),
-        });
-        inputTaskElement.value = '';
-        indexTask++;
+    try {
+        const inputTaskElement = document.querySelector('#input_task');
+        if (inputTaskElement.value) {
+            indexTask++;
+            createTask(myTaskList, indexTask, inputTaskElement.value);
+            const task = {
+                id: indexTask,
+                name: inputTaskElement.value,
+                description: '',
+                important: false,
+                status: false,
+            };
+            await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(task),
+            });
+            inputTaskElement.value = '';
+        }
+    } catch (err) {
+        alert('Lỗi thêm task');
     }
 };
 const closeFormDetailTask = formDetailTask.querySelector(
@@ -241,7 +244,7 @@ function hiddenDetailTask() {
     closeFormDetailTask.removeEventListener('click', hiddenDetailTask);
 }
 
-async function editTask(event) {
+function editTask(event) {
     event.stopPropagation(); // ngăn chặn sự kiện nổi bọt
 
     // lấy ra task cần sửa
@@ -267,30 +270,34 @@ async function editTask(event) {
     //onsubmit form update
     formDialogUpdate.addEventListener('submit', async function (e) {
         e.preventDefault();
-        if (inputNewName.value != inputOldName.value) {
-            const task = {
-                id: taskElement.getAttribute('data-index'),
-                name: inputNewName.value,
-                description: '',
-                important: false,
-                status: false,
-            };
-            //call api to server update task
-            await fetch(url + '/' + task.id, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(task),
-            });
-            //change name task in UI
-            taskElement.querySelector('.content_mytask-title').textContent =
-                inputNewName.value;
-            //close form update
-            inputOldName.value = '';
-            inputNewName.value = '';
-            formUpdate.classList.remove('show');
-            alert('Cập nhật thành công!');
-        } else {
-            errElement.textContent = 'Tên task không được trùng với tên cũ';
+        try {
+            if (inputNewName.value != inputOldName.value) {
+                const task = {
+                    id: taskElement.getAttribute('data-index'),
+                    name: inputNewName.value,
+                    description: '',
+                    important: false,
+                    status: false,
+                };
+                //call api to server update task
+                await fetch(url + '/' + task.id, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(task),
+                });
+                //change task in UI
+                taskElement.querySelector('.content_mytask-title').textContent =
+                    inputNewName.value;
+                //close form update
+                inputOldName.value = '';
+                inputNewName.value = '';
+                formUpdate.classList.remove('show');
+                alert('Cập nhật thành công!');
+            } else {
+                errElement.textContent = 'Tên task không được trùng với tên cũ';
+            }
+        } catch (err) {
+            alert('Cập nhật thất bại!');
         }
     });
 
@@ -304,8 +311,23 @@ async function editTask(event) {
 }
 
 async function deleteTask(event) {
-    event.stopPropagation();
-    console.log(event.target);
+    try {
+        event.stopPropagation(); // ngăn chặn sự kiện nổi bọt
+        // lấy ra task cần xóa
+        let taskElement = event.target;
+        while (!taskElement.classList.contains('content_mytask-item')) {
+            taskElement = taskElement.parentNode;
+        }
+        const id = taskElement.getAttribute('data-index');
+        //call api to server to delete task
+        await fetch(url + '/' + id, {
+            method: 'DELETE',
+        });
+        alert('Xóa thành công!');
+        taskElement.remove(); // delete task in UI
+    } catch (err) {
+        console.log(err);
+    }
 }
 
 function showButtonTask(event) {
@@ -320,20 +342,19 @@ function showButtonTask(event) {
     window.addEventListener('click', hiddenButtonTask);
 }
 window.removeEventListener('click', hiddenDetailTask);
-
 window.addEventListener('click', function () {});
 window.addEventListener('load', async function () {
     try {
         const res = await fetch(url);
         const tasks = await res.json();
+        if (tasks.length > 0) {
+            indexTask = tasks[tasks.length - 1].id;
+        }
+        //Lấy từng task trong db và hiển thị lên UI
         tasks.forEach(task => {
-            if (task.status) {
-                createTask(listTasksComplated, task.id, task.name);
-                indexTask++;
-            } else {
-                createTask(myTaskList, task.id, task.name);
-                indexTask++;
-            }
+            task.status
+                ? createTask(listTasksComplated, task.id, task.name)
+                : createTask(myTaskList, task.id, task.name);
         });
     } catch (err) {
         console.log(err);
