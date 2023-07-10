@@ -67,15 +67,32 @@ function noImportant(event) {
         buttonNoImportant.classList.add('hidden');
     }
 }
-function important(event) {
-    event.stopPropagation();
-    let buttonImportant = event.target;
-    buttonImportant = buttonImportant.parentNode;
-    const buttonNoImportant =
-        buttonImportant.parentNode.querySelector('#noimportant');
-    if (buttonNoImportant.classList.contains('hidden')) {
-        buttonNoImportant.classList.remove('hidden');
-        buttonImportant.classList.add('hidden');
+async function important(event) {
+    try {
+        event.stopPropagation();
+        let buttonImportant = event.target;
+        buttonImportant = buttonImportant.parentNode;
+        const buttonNoImportant =
+            buttonImportant.parentNode.querySelector('#noimportant');
+        if (buttonNoImportant.classList.contains('hidden')) {
+            buttonNoImportant.classList.remove('hidden');
+            buttonImportant.classList.add('hidden');
+
+            let taskElement = buttonImportant.parentNode;
+            while (!taskElement.classList.contains('content_mytask-item')) {
+                taskElement = taskElement.parentNode;
+            }
+            const id = taskElement.getAttribute('data-index');
+            await fetch(url + '/' + id, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ important: true }),
+            });
+        }
+    } catch (error) {
+        console.log(error);
     }
 }
 function ShowDayNow() {
@@ -213,19 +230,13 @@ async function updatefinish(event) {
         let name = elementTask.querySelector(
             '.content_mytask-title',
         ).textContent;
-        const task = {
-            id,
-            name,
-            description: '',
-            important: false,
-            status: true,
-        };
+        //call API to server update status task
         await fetch(url + '/' + id, {
-            method: 'PUT',
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(task),
+            body: JSON.stringify({ status: true }),
         });
         elementTask.remove();
     } catch (error) {
@@ -241,25 +252,20 @@ async function updateTaskNotFinish(event) {
         while (!elementTask.classList.contains('content_mytask-item')) {
             elementTask = elementTask.parentNode;
         }
+        //add task to list task not finish and remove task in list task finish on UI
         addTaskNotFinish(elementTask);
         elementTask.remove();
         let id = elementTask.getAttribute('data-index');
         let name = elementTask.querySelector(
             '.content_mytask-title',
         ).textContent;
-        const task = {
-            id,
-            name,
-            description: '',
-            important: false,
-            status: false,
-        };
+        //Call API to server update status task
         await fetch(url + '/' + id, {
-            method: 'PUT',
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(task),
+            body: JSON.stringify({ status: false }),
         });
     } catch (error) {
         console.log('Lỗi update task');
@@ -354,27 +360,22 @@ function editTask(event) {
 
     //form upadate dialog
     const formDialogUpdate = formUpdate.querySelector('.form-update-dialog');
-    //onsubmit form update
+    //listent event onsubmit form update dialog
     formDialogUpdate.addEventListener('submit', async function (e) {
         e.preventDefault();
         try {
             if (inputNewName.value != inputOldName.value) {
-                const task = {
-                    id: taskElement.getAttribute('data-index'),
-                    name: inputNewName.value,
-                    description: '',
-                    important: false,
-                    status: false,
-                };
-                //call api to server update task
-                await fetch(url + '/' + task.id, {
-                    method: 'PUT',
+                let id = taskElement.getAttribute('data-index');
+                let name = inputNewName.value;
+                //call api to server update task name
+                await fetch(url + '/' + id, {
+                    method: 'PATCH',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(task),
+                    body: JSON.stringify({ name }),
                 });
                 //change task in UI
                 taskElement.querySelector('.content_mytask-title').textContent =
-                    inputNewName.value;
+                    name;
                 //close form update
                 inputOldName.value = '';
                 inputNewName.value = '';
