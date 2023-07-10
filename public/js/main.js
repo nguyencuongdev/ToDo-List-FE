@@ -2,6 +2,7 @@ const menu = document.querySelector('#menu');
 const sidebar = document.querySelector('#sidebar');
 const content = document.querySelector('.content');
 const menu_hidden = document.querySelector('#menu_hidden');
+const url = '  http://localhost:3000/tasks';
 
 const listTasksComplated = document.querySelector(
     '.content_mytask-compate-list',
@@ -17,7 +18,7 @@ const formAddTask = document.querySelector('#form-add-task');
 const audio = new Audio('/public/audios/tinhtinh.mp4');
 
 let day = '';
-let indexTask = 0;
+let indexTask = 1;
 
 menu.onclick = () => {
     if (
@@ -101,17 +102,24 @@ function playTinhTinh() {
             });
     }
 }
+const myTaskList = document.querySelector('.content_mytask-list');
 
-function addTask(task) {
-    const myTaskList = document.querySelector('.content_mytask-list');
+function createTask(
+    List,
+    id,
+    name,
+    description = '',
+    important = false,
+    status = false,
+) {
     let myTaskItem = document.createElement('div');
-    myTaskItem.setAttribute('data-index', indexTask);
+    myTaskItem.setAttribute('data-index', id);
     myTaskItem.classList.add('content_mytask-item');
     myTaskItem.innerHTML = `  <div class="content_mytask-group">
                                 <button id="updatefinish" onclick="updatefinish(event)">
                                     <i class="fi fi-rr-circle" id="finish-icon"></i>
                                 </button>
-                                <h4 class="content_mytask-title" onclick=" event.stopPropagation();">${task.value}</h4>
+                                <h4 class="content_mytask-title" onclick=" event.stopPropagation();">${name}</h4>
                             </div>
                             <div title="Đánh dấu công việc quan trọng">
                                <button id="important" onclick="important(event)">
@@ -134,87 +142,20 @@ function addTask(task) {
                             </div>`;
     myTaskItem.addEventListener('click', showDetailTask);
     myTaskItem.addEventListener('contextmenu', showButtonTask);
-    indexTask++;
-    task.value = '';
-    myTaskList.prepend(myTaskItem);
+    List.prepend(myTaskItem);
 }
 
 function addTaskFinished(element) {
-    const task = element.querySelector('.content_mytask-title');
-    const myTaskCompleted = document.querySelector(
-        '.content_mytask-compate-list',
-    );
-    const myTaskItem = document.createElement('div');
-    myTaskItem.classList.add('content_mytask-item');
-    myTaskItem.innerHTML = `  <div class="content_mytask-group">
-                               <button id="not-update-finish" onclick="updateTaskNotFinish(event)">
-                                   <img src="./public/imgs/check-circle.png" alt="">
-                                </button>
-                                 <h4 class="content_mytask-title" onclick=" event.stopPropagation();">${task.textContent}</h4>
-                            </div>
-                            <div title="Đánh dấu công việc quan trọng">
-                               <button id="important" onclick="important(event)">
-                                   <i class="fi fi-rr-star"></i>
-                                </button>
-                                <button id="noimportant" class="hidden" onclick="noImportant(event)">
-                                    <img src="./public/imgs/star.png">
-                                </button>
-                            </div>
-                             <div class="content_mytask-item-button">
-                                <button class="content_mytask-button-item edit" onclick="editTask(event)">
-                                    Sửa task
-                                    <i class="fi fi-rr-edit"></i>
-                                </button>
-                                <button class="content_mytask-button-item delete" onclick="deleteTask(event)">
-                                    Xóa task
-                                    <i class="fi fi-rr-trash"></i>
-                                </button>
-                                </div>
-                            </div>`;
-    myTaskCompleted.prepend(myTaskItem);
-    listTasksComplated.classList.remove('hidden');
-    myTaskItem.addEventListener('click', showDetailTask);
-    myTaskItem.addEventListener('contextmenu', showButtonTask);
+    const name = element.querySelector('.content_mytask-title').textContent;
+    const id = element.getAttribute('data-index');
+    createTask(listTasksComplated, id, name);
     playTinhTinh();
 }
 
 function addTaskNotFinish(element) {
     const task = element.querySelector('.content_mytask-title');
-    const myTaskList = document.querySelector('.content_mytask-list');
-    const myTaskItem = document.createElement('div');
-    myTaskItem.classList.add('content_mytask-item');
-    myTaskItem.innerHTML = `  <div class="content_mytask-group">
-                                <button id="updatefinish"  onclick="updatefinish(event)">
-                                    <i class="fi fi-rr-circle" id="finish-icon"></i>
-                                </button>
-                                <h4 class="content_mytask-title">${task.textContent}</h4>
-                            </div>
-                            <div title="Đánh dấu công việc quan trọng">
-                               <button id="important" onclick="important(event)">
-                                   <i class="fi fi-rr-star"></i>
-                                </button>
-                                <button id="noimportant" class="hidden" onclick="noImportant(event)">
-                                    <img src="./public/imgs/star.png">
-                                </button>
-                            </div>
-                             <div class="content_mytask-item-button">
-                                <button class="content_mytask-button-item edit" onclick="editTask(event)">
-                                    Sửa task
-                                    <i class="fi fi-rr-edit"></i>
-                                </button>
-                                <button class="content_mytask-button-item delete" onclick="deleteTask(event)">
-                                    Xóa task
-                                    <i class="fi fi-rr-trash"></i>
-                                </button>
-                                </div>
-                            </div>`;
-    myTaskItem.addEventListener('click', showDetailTask);
-    myTaskItem.addEventListener('contextmenu', showButtonTask);
-    myTaskList.prepend(myTaskItem);
-}
-
-function removeTaskComplated(element) {
-    addTaskNotFinish(element);
+    let id = element.getAttribute('data-index');
+    createTask(myTaskList, id, task.textContent);
 }
 
 function updatefinish(event) {
@@ -235,7 +176,7 @@ function updateTaskNotFinish(event) {
     while (!elementTask.classList.contains('content_mytask-item')) {
         elementTask = elementTask.parentNode;
     }
-    removeTaskComplated(elementTask);
+    addTaskNotFinish(elementTask);
     elementTask.remove();
 }
 
@@ -243,7 +184,9 @@ formAddTask.onsubmit = async function (e) {
     e.preventDefault();
     const inputTaskElement = document.querySelector('#input_task');
     if (inputTaskElement.value) {
-        addTask(inputTaskElement);
+        createTask(myTaskList, indexTask, inputTaskElement.value);
+        inputTaskElement.value = '';
+        indexTask++;
     }
 };
 const closeFormDetailTask = formDetailTask.querySelector(
@@ -338,3 +281,22 @@ function showButtonTask(event) {
 window.removeEventListener('click', hiddenDetailTask);
 
 window.addEventListener('click', function () {});
+window.addEventListener('load', async function () {
+    try {
+        const res = await fetch(url);
+        const tasks = await res.json();
+        tasks.forEach(task => {
+            if (task.status) {
+                createTask(listTasksComplated, task.id, task.name);
+                indexTask++;
+                console.log(indexTask);
+            } else {
+                createTask(myTaskList, task.id, task.name);
+                indexTask++;
+                console.log(indexTask);
+            }
+        });
+    } catch (err) {
+        console.log(err);
+    }
+});
