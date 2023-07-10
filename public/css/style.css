@@ -469,9 +469,9 @@ ol {
     border: none;
 }
 
-#not-update-finish > img {
-    width: 16px;
-    height: 16px;
+#not-update-finish > i {
+    font-size: 1.6rem;
+    color: #00c4ff;
 }
 
 .content_mytask-group {

@@ -145,10 +145,51 @@ function createTask(
     List.prepend(myTaskItem);
 }
 
+function createTaskFinish(
+    List,
+    id,
+    name,
+    description = '',
+    important = false,
+    status = false,
+) {
+    let myTaskItem = document.createElement('div');
+    myTaskItem.setAttribute('data-index', id);
+    myTaskItem.classList.add('content_mytask-item');
+    myTaskItem.innerHTML = `  <div class="content_mytask-group">
+                                <button id="not-update-finish" onclick="updateTaskNotFinish(event)">
+                                    <i class="fi fi-rr-check-circle"></i>
+                                </button>
+                                <h4 class="content_mytask-title" onclick=" event.stopPropagation();">${name}</h4>
+                            </div>
+                            <div title="Đánh dấu công việc quan trọng">
+                               <button id="important" onclick="important(event)">
+                                   <i class="fi fi-rr-star"></i>
+                                </button>
+                                <button id="noimportant" class="hidden" onclick="noImportant(event)">
+                                    <img src="./public/imgs/star.png">
+                                </button>
+                            </div>
+                             <div class="content_mytask-item-button">
+                                <button class="content_mytask-button-item edit" onclick="editTask(event)">
+                                    Sửa task
+                                    <i class="fi fi-rr-edit"></i>
+                                </button>
+                                <button class="content_mytask-button-item delete" onclick="deleteTask(event)">
+                                    Xóa task
+                                    <i class="fi fi-rr-trash"></i>
+                                </button>
+                                </div>
+                            </div>`;
+    myTaskItem.addEventListener('click', showDetailTask);
+    myTaskItem.addEventListener('contextmenu', showButtonTask);
+    List.prepend(myTaskItem);
+}
+
 function addTaskFinished(element) {
     const name = element.querySelector('.content_mytask-title').textContent;
     const id = element.getAttribute('data-index');
-    createTask(listTasksComplated, id, name);
+    createTaskFinish(listTasksComplated, id, name);
     listTasksComplated.classList.remove('hidden');
     playTinhTinh();
 }
@@ -192,17 +233,40 @@ async function updatefinish(event) {
     }
 }
 
-function updateTaskNotFinish(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    let elementTask = event.target.parentNode;
-    while (!elementTask.classList.contains('content_mytask-item')) {
-        elementTask = elementTask.parentNode;
+async function updateTaskNotFinish(event) {
+    try {
+        event.preventDefault();
+        event.stopPropagation();
+        let elementTask = event.target.parentNode;
+        while (!elementTask.classList.contains('content_mytask-item')) {
+            elementTask = elementTask.parentNode;
+        }
+        addTaskNotFinish(elementTask);
+        elementTask.remove();
+        let id = elementTask.getAttribute('data-index');
+        let name = elementTask.querySelector(
+            '.content_mytask-title',
+        ).textContent;
+        const task = {
+            id,
+            name,
+            description: '',
+            important: false,
+            status: false,
+        };
+        await fetch(url + '/' + id, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(task),
+        });
+    } catch (error) {
+        console.log('Lỗi update task');
     }
-    addTaskNotFinish(elementTask);
-    elementTask.remove();
 }
 
+//listen event submit form add task
 formAddTask.onsubmit = async function (e) {
     e.preventDefault();
     try {
@@ -376,7 +440,7 @@ window.addEventListener('load', async function () {
         //Lấy từng task trong db và hiển thị lên UI
         tasks.forEach(task => {
             task.status
-                ? createTask(listTasksComplated, task.id, task.name)
+                ? createTaskFinish(listTasksComplated, task.id, task.name)
                 : createTask(myTaskList, task.id, task.name);
         });
     } catch (err) {
