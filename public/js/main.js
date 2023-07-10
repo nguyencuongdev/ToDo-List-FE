@@ -242,12 +242,15 @@ function hiddenDetailTask() {
 }
 
 async function editTask(event) {
-    event.stopPropagation();
+    event.stopPropagation(); // ngăn chặn sự kiện nổi bọt
+
+    // lấy ra task cần sửa
     let taskElement = event.target;
     while (!taskElement.classList.contains('content_mytask-item')) {
         taskElement = taskElement.parentNode;
     }
-    console.log(taskElement);
+
+    //show form update and listen event submit
     const formUpdate = document.querySelector('#form-update');
     formUpdate.classList.add('show');
     const btnCloseFormUpdate = formUpdate.querySelector('.form-update-btn');
@@ -255,18 +258,43 @@ async function editTask(event) {
     inputOldName.value = taskElement.querySelector(
         '.content_mytask-title',
     ).textContent;
+
     const inputNewName = formUpdate.querySelector('#new-name');
-    inputNewName.addEventListener('blur', function () {
+    const errElement = formUpdate.querySelector('.message');
+
+    //form upadate dialog
+    const formDialogUpdate = formUpdate.querySelector('.form-update-dialog');
+    //onsubmit form update
+    formDialogUpdate.addEventListener('submit', async function (e) {
+        e.preventDefault();
         if (inputNewName.value != inputOldName.value) {
-            console.log(inputNewName.value);
-            //Update
+            const task = {
+                id: taskElement.getAttribute('data-index'),
+                name: inputNewName.value,
+                description: '',
+                important: false,
+                status: false,
+            };
+            //call api to server update task
+            await fetch(url + '/' + task.id, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(task),
+            });
+            //change name task in UI
+            taskElement.querySelector('.content_mytask-title').textContent =
+                inputNewName.value;
+            //close form update
+            inputOldName.value = '';
+            inputNewName.value = '';
+            formUpdate.classList.remove('show');
+            alert('Cập nhật thành công!');
         } else {
-            const errElement = formUpdate.querySelector('.message');
-            console.log(errElement);
             errElement.textContent = 'Tên task không được trùng với tên cũ';
         }
     });
 
+    //listen event click button close form update
     function hiddenFormUpdate(e) {
         e.preventDefault();
         formUpdate.classList.remove('show');
@@ -302,11 +330,9 @@ window.addEventListener('load', async function () {
             if (task.status) {
                 createTask(listTasksComplated, task.id, task.name);
                 indexTask++;
-                console.log(indexTask);
             } else {
                 createTask(myTaskList, task.id, task.name);
                 indexTask++;
-                console.log(indexTask);
             }
         });
     } catch (err) {
