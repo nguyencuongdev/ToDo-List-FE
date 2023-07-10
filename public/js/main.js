@@ -185,6 +185,19 @@ formAddTask.onsubmit = async function (e) {
     const inputTaskElement = document.querySelector('#input_task');
     if (inputTaskElement.value) {
         createTask(myTaskList, indexTask, inputTaskElement.value);
+        const formTask = new FormData(this);
+        const task = {
+            id: indexTask,
+            name: formTask.get('name'),
+            description: '',
+            important: false,
+            status: false,
+        };
+        await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(task),
+        });
         inputTaskElement.value = '';
         indexTask++;
     }
