@@ -188,8 +188,8 @@
                                 placeholder="Thêm chú thích"></textarea>
                         </div>
                         <div class="detail_mytask-save-cancel">
-                            <input type="reset" class="detail_mytask-cacel">
-                            <input type="submit" class="detail_mytask-save">
+                            <input type="reset" class="detail_mytask-cancel" value="Hủy thay đổi">
+                            <input type="submit" class="detail_mytask-save" value="Lưu">
                         </div>
                     </form>
                 </div>
@@ -208,12 +208,13 @@
                 </button>
                 <div class="form-update-group">
                     <label for="#old-name" class="form-update-label">Tên cũ: </label>
-                    <input type="text" class="form-update-control" id="old-name">
+                    <input type="text" class="form-update-control" id="old-name" readonly disabled>
                 </div>
                 <div class="form-update-group">
                     <label for="#new-name" class="form-update-label">Tên mới: </label>
-                    <input type="text" class="form-update-control" id="new-name">
+                    <input type="text" class="form-update-control" id="new-name"> <br>
                 </div>
+                <span class="message"></span>
                 <div class="form-update-group form-update-submit">
                     <input type="submit" value="Cập nhật" id="form-control-submit">
                 </div>
