@@ -149,6 +149,7 @@ function addTaskFinished(element) {
     const name = element.querySelector('.content_mytask-title').textContent;
     const id = element.getAttribute('data-index');
     createTask(listTasksComplated, id, name);
+    listTasksComplated.classList.remove('hidden');
     playTinhTinh();
 }
 
@@ -158,15 +159,37 @@ function addTaskNotFinish(element) {
     createTask(myTaskList, id, task.textContent);
 }
 
-function updatefinish(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    let elementTask = event.target.parentNode;
-    while (!elementTask.classList.contains('content_mytask-item')) {
-        elementTask = elementTask.parentNode;
+async function updatefinish(event) {
+    try {
+        event.preventDefault();
+        event.stopPropagation();
+        let elementTask = event.target.parentNode;
+        while (!elementTask.classList.contains('content_mytask-item')) {
+            elementTask = elementTask.parentNode;
+        }
+        addTaskFinished(elementTask);
+        let id = elementTask.getAttribute('data-index');
+        let name = elementTask.querySelector(
+            '.content_mytask-title',
+        ).textContent;
+        const task = {
+            id,
+            name,
+            description: '',
+            important: false,
+            status: true,
+        };
+        await fetch(url + '/' + id, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(task),
+        });
+        elementTask.remove();
+    } catch (error) {
+        console.log('Lỗi update task');
     }
-    addTaskFinished(elementTask);
-    elementTask.remove();
 }
 
 function updateTaskNotFinish(event) {
