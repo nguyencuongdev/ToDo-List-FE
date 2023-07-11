@@ -56,15 +56,33 @@ function ShowTaskFinished() {
     listTasksComplated.classList.toggle('hidden');
 }
 
-function noImportant(event) {
-    event.stopPropagation();
-    let buttonNoImportant = event.target;
-    buttonNoImportant = buttonNoImportant.parentNode;
-    const buttonImportant =
-        buttonNoImportant.parentNode.querySelector('#important');
-    if (buttonImportant.classList.contains('hidden')) {
-        buttonImportant.classList.remove('hidden');
-        buttonNoImportant.classList.add('hidden');
+async function noImportant(event) {
+    try {
+        event.stopPropagation();
+        let buttonNoImportant = event.target;
+        buttonNoImportant = buttonNoImportant.parentNode;
+        const buttonImportant =
+            buttonNoImportant.parentNode.querySelector('#important');
+        if (buttonImportant.classList.contains('hidden')) {
+            buttonImportant.classList.remove('hidden');
+            buttonNoImportant.classList.add('hidden');
+
+            //Lấy ra task và id của task cần update
+            let taskElement = buttonNoImportant.parentNode;
+            while (!taskElement.classList.contains('content_mytask-item')) {
+                taskElement = taskElement.parentNode;
+            }
+            const id = taskElement.getAttribute('data-index');
+            await fetch(url + '/' + id, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ important: false }),
+            });
+        }
+    } catch (error) {
+        console.log(error);
     }
 }
 async function important(event) {
@@ -159,6 +177,10 @@ function createTask(
                             </div>`;
     myTaskItem.addEventListener('click', showDetailTask);
     myTaskItem.addEventListener('contextmenu', showButtonTask);
+    if (important) {
+        myTaskItem.querySelector('#important').classList.add('hidden');
+        myTaskItem.querySelector('#noimportant').classList.remove('hidden');
+    }
     List.prepend(myTaskItem);
 }
 
@@ -200,6 +222,11 @@ function createTaskFinish(
                             </div>`;
     myTaskItem.addEventListener('click', showDetailTask);
     myTaskItem.addEventListener('contextmenu', showButtonTask);
+    //Check task important ?
+    if (important) {
+        myTaskItem.querySelector('#important').classList.add('hidden');
+        myTaskItem.querySelector('#noimportant').classList.remove('hidden');
+    }
     List.prepend(myTaskItem);
 }
 
@@ -441,8 +468,20 @@ window.addEventListener('load', async function () {
         //Lấy từng task trong db và hiển thị lên UI
         tasks.forEach(task => {
             task.status
-                ? createTaskFinish(listTasksComplated, task.id, task.name)
-                : createTask(myTaskList, task.id, task.name);
+                ? createTaskFinish(
+                      listTasksComplated,
+                      task.id,
+                      task.name,
+                      false,
+                      task.important,
+                  )
+                : createTask(
+                      myTaskList,
+                      task.id,
+                      task.name,
+                      false,
+                      task.important,
+                  );
         });
     } catch (err) {
         console.log(err);
