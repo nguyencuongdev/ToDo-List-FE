@@ -51,8 +51,8 @@
         {
             "id": 13,
             "name": "Working ToDo-list",
-            "description": "",
-            "important": false,
+            "description": "Cuong 123",
+            "important": true,
             "status": false,
             "ListDetail": [
                 {
@@ -72,6 +72,18 @@
                     "idTaskDetail": 2,
                     "name": "Cong viec 4",
                     "status": false
+                },
+                {
+                    "idTaskDetail": 3,
+                    "name": "Cong Viec 5",
+                    "status": false,
+                    "id": "13"
+                },
+                {
+                    "idTaskDetail": 4,
+                    "name": "Cong viec 6",
+                    "status": false,
+                    "id": "13"
                 }
             ]
         }

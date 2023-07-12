@@ -303,7 +303,7 @@ formAddTask.onsubmit = async function (e) {
         const inputTaskElement = document.querySelector('#input_task');
         if (inputTaskElement.value) {
             idTask++;
-            createTask(myTaskList, idTask, inputTaskElement.value);
+            createTask(myTaskList, idTask, inputTaskElement.value); //create task on UI
             const task = {
                 id: idTask,
                 name: inputTaskElement.value,
@@ -359,25 +359,32 @@ async function showDetailTask(event) {
 
     //List task next and call API để lấy dữ liệu của task đó.
     let ListDetail = [];
+    let description = '';
     await fetch(url + '/' + id)
         .then(res => res.json())
         .then(task => {
             ListDetail = task.ListDetail;
+            description = task.description;
         })
         .catch(err => console.log(err));
     let idTaskDetail = ListDetail[ListDetail.length - 1]?.idTaskDetail || 0;
-    console.log(idTaskDetail);
+
     //lấy ra form add task next và list task next
-    const formAddTaskNext = formDetailTask.querySelector('#form_mytask-next');
+    const formAddTasksNext = formDetailTask.querySelector('#form_mytask-next');
     const listTaskNext = formDetailTask.querySelector(
         '.detail_mytask-next-list',
     );
 
+    listTaskNext.innerHTML = ''; // clear list task next trước khi add tasks next vào
+
     //Show list task next to UI
     ListDetail.forEach(task => {
-        console.log(task);
         createTaskNext(listTaskNext, task.idTaskDetail, task.name, task.id);
     });
+
+    //Show description of task to UI
+    const inputDescription = formAddTasksNext.querySelector('#description');
+    inputDescription.value = description;
 
     //function add task next
     function createTaskNext(list, idTaskDetail, name, id) {
@@ -405,10 +412,12 @@ async function showDetailTask(event) {
     //listen event click button add task next
     const buttonAddTaskNext = formDetailTask.querySelector('#detail_task-add');
     buttonAddTaskNext.addEventListener('click', function (event) {
+        const inputTaskNext =
+            formAddTasksNext.querySelector('#input_task-next');
         event.preventDefault();
         event.stopPropagation();
-        const inputTaskNext = formAddTaskNext.querySelector('#input_task-next');
         if (inputTaskNext.value) {
+            idTaskDetail++;
             createTaskNext(
                 listTaskNext,
                 idTaskDetail,
@@ -422,25 +431,28 @@ async function showDetailTask(event) {
                 status: false,
                 id,
             };
-            idTaskDetail++;
-            ListDetail.push(taskDetail);
+            ListDetail.push(taskDetail); // add to list Task next temp
             inputTaskNext.value = '';
-            console.log(ListDetail);
         }
     });
 
-    // //listen event submit form add task next
-    // formAddTaskNext.addEventListener('submit', async function (event) {
-    //     event.preventDefault();
-    //     await fetch(url + '/' + id, {
-    //         method: 'PUT',
-    //         header: {
-    //             'Content-Type': 'aplication/json'
-    //         },
-    //         body: JSON.stringify({ ListDetail })
-    //     });
-    //     alert('Them thành công');
-    // });
+    // listen event submit form add task next
+    formAddTasksNext.addEventListener('submit', async function (event) {
+        try {
+            event.preventDefault();
+            await fetch(url + '/' + id, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    description: inputDescription.value,
+                    ListDetail,
+                }),
+            });
+            alert('Them thành công');
+        } catch (err) {
+            alert('Lỗi thêm task next');
+        }
+    });
 }
 
 function hiddenDetailTask() {
