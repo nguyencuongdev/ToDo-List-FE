@@ -441,7 +441,7 @@ ol {
     border-bottom-right-radius: 4px;
 }
 
-#important,
+.important,
 #finish-icon {
     font-size: 1.6rem;
     color: #00c4ff;
@@ -450,18 +450,18 @@ ol {
     background-color: transparent;
 }
 
-#noimportant {
+.noimportant {
     border: none;
     background-color: transparent;
 }
 
-#noimportant.hidden,
-#important.hidden {
+.noimportant.hidden,
+.important.hidden {
     display: none;
 }
 
-#updatefinish,
-#not-update-finish {
+.updatefinish,
+.not-update-finish {
     display: block;
     padding: 4px;
     cursor: pointer;
@@ -469,7 +469,7 @@ ol {
     border: none;
 }
 
-#not-update-finish > i {
+.not-update-finish {
     font-size: 1.6rem;
     color: #00c4ff;
 }
@@ -534,8 +534,8 @@ ol {
 }
 
 .detail_mytask-next-item {
-    height: 52px;
-    box-shadow: 1px 1px 18px rgba(0, 0, 0, 0.1);
+    min-height: 52px;
+    /* box-shadow: 1px 1px 18px rgba(0, 0, 0, 0.1); */
     border-radius: 8px;
     background-color: #ffff;
     padding: 0 10px;
@@ -551,22 +551,22 @@ ol {
     width: 100%;
 }
 
+.detail_mytask-item.content_mytask-item {
+    margin-top: 0;
+    padding-left: 0;
+    height: 32px;
+}
+
 .detail_mytask-next-item > i {
     font-size: 1.6rem;
     color: red;
     cursor: pointer;
 }
 
-.detail_mytask-next-item > i:hover {
-    transform: scale(1.5);
-    transition: transform 0.1s linear;
+.detail_mytask-btn.delete:hover > i {
+    font-size: 1.8rem;
 }
 
-.detail_mytask-next-group {
-    width: 100%;
-}
-
-.detail_mytask-next-group,
 .detail_mytask-next-group,
 .detail_mytask-group {
     display: flex;
@@ -574,34 +574,31 @@ ol {
 }
 
 .detail_mytask-next-add > i,
-#detail_mytask-next-updatefinish,
-.detail_mytask-next-title > i,
-.detail_mytask-title,
-#detail_mytask-important,
-#detail_finish-icon {
+.detail_mytask-title {
     font-size: 1.6rem;
     color: #00c4ff;
 }
 
-.detail_mytask-next-group > h4 {
+.detail_mytask-next-title {
     font-size: 1.4rem;
-    font-weight: 400;
+    color: #00c4ff;
 }
 
-#detail_mytask-next-updatefinish,
-#detail_finish-icon {
+.detail_mytask-btn {
+    background-color: transparent;
+    border: none;
     margin-right: 6px;
+    color: #00c4ff;
+    font-size: 1.6rem;
     cursor: pointer;
 }
 
-.detail_mytask-next-add > i,
-.detail_mytask-next-title > i,
-#detail_mytask-important {
-    cursor: pointer;
-}
-
-#detail_mytask-noimportant.hidden {
+.detail_mytask-btn.hidden {
     display: none;
+}
+
+.detail_mytask-btn.delete {
+    color: red;
 }
 
 .detail-mytask-next > div {
@@ -721,6 +718,14 @@ ol {
 .detail_mytask-save {
     background-color: #00c4ff;
     margin-left: 10px;
+}
+
+.detail_mytask-next-list {
+    display: flex;
+    flex-direction: column;
+    height: 208px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 #form-update {

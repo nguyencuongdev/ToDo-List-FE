@@ -152,27 +152,26 @@
                     </div>
                 </div>
                 <div class="detail">
-                    <div class="detail_mytask-item">
-                        <div class="detail_mytask-group">
-                            <a href="" id="detail_mytask-updatefinish">
-                                <i
-                                    class="fi fi-rr-circle"
-                                    id="detail_finish-icon"
-                                ></i>
-                            </a>
-                            <h4 class="detail_mytask-title">Tên công việc</h4>
+                    <div class="detail_mytask-item content_mytask-item">
+                        <div class="content_mytask-group">
+                            <h4
+                                class="detail_mytask-title"
+                                onclick="event.stopPropagation()"
+                            ></h4>
                         </div>
                         <div title="Đánh dấu công việc quan trọng">
-                            <i
-                                class="fi fi-rr-star"
-                                id="detail_mytask-important"
-                            ></i>
-                            <img
-                                src="./public/imgs/star.png"
-                                class="hidden"
-                                id="detail_mytask-noimportant"
-                                alt=""
-                            />
+                            <button
+                                class="important"
+                                onclick="important(event)"
+                            >
+                                <i class="fi fi-rr-star"></i>
+                            </button>
+                            <button
+                                class="noimportant hidden"
+                                onclick="noImportant(event)"
+                            >
+                                <img src="./public/imgs/star.png" />
+                            </button>
                         </div>
                     </div>
                     <div class="detail_mytask-container">
@@ -188,19 +187,29 @@
                                 <div class="detail_mytask-next-list">
                                     <div class="detail_mytask-next-item">
                                         <div class="detail_mytask-next-group">
-                                            <a href="">
+                                            <button
+                                                class="detail_mytask-btn update-finish"
+                                            >
+                                                <i class="fi fi-rr-circle"></i>
+                                            </button>
+                                            <button
+                                                class="detail_mytask-btn not-update-finish hidden"
+                                            >
                                                 <i
-                                                    class="fi fi-rr-circle"
-                                                    id="detail_mytask-next-updatefinish"
+                                                    class="fi fi-rr-check-circle"
                                                 ></i>
-                                            </a>
+                                            </button>
                                             <h4
                                                 class="detail_mytask-next-title"
                                             >
                                                 Tên công việc
                                             </h4>
                                         </div>
-                                        <i class="fi fi-rr-cross-small"></i>
+                                        <button
+                                            class="detail_mytask-btn delete"
+                                        >
+                                            <i class="fi fi-rr-cross-small"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>

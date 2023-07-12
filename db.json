@@ -5,49 +5,75 @@
             "name": "Learn Bootstrap v4.4",
             "description": "",
             "important": true,
-            "status": true
+            "status": true,
+            "ListDetail": []
         },
         {
             "id": 4,
             "name": "Learn NodeJS",
             "description": "",
             "important": true,
-            "status": false
-        },
-        {
-            "id": 6,
-            "name": "Quan choi game",
-            "description": "",
-            "important": false,
-            "status": true
-        },
-        {
-            "id": 7,
-            "name": "Tuan Choi game PUBG",
-            "description": "",
-            "important": false,
-            "status": true
+            "status": true,
+            "ListDetail": []
         },
         {
             "id": 8,
             "name": "Learn JavaScript",
             "description": "",
             "important": true,
-            "status": false
+            "status": true,
+            "ListDetail": []
         },
         {
             "id": 9,
             "name": "Learn ReactJs",
             "description": "",
             "important": true,
-            "status": false
+            "status": false,
+            "ListDetail": []
         },
         {
             "id": 10,
             "name": "Learn TypeJS",
             "description": "",
             "important": true,
-            "status": false
+            "status": false,
+            "ListDetail": []
+        },
+        {
+            "id": 11,
+            "name": "Về Quê",
+            "description": "",
+            "important": true,
+            "status": true,
+            "ListDetail": []
+        },
+        {
+            "id": 13,
+            "name": "Working ToDo-list",
+            "description": "",
+            "important": false,
+            "status": false,
+            "ListDetail": [
+                {
+                    "id": 13,
+                    "idTaskDetail": 0,
+                    "name": "Cong viec 2",
+                    "status": false
+                },
+                {
+                    "id": 13,
+                    "idTaskDetail": 1,
+                    "name": "Cong viec 3",
+                    "status": false
+                },
+                {
+                    "id": 13,
+                    "idTaskDetail": 2,
+                    "name": "Cong viec 4",
+                    "status": false
+                }
+            ]
         }
     ]
 }

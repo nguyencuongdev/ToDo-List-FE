@@ -18,7 +18,8 @@ const formAddTask = document.querySelector('#form-add-task');
 const audio = new Audio('/public/audios/tinhtinh.mp4');
 
 let day = '';
-let indexTask = 0;
+let idTask = 0;
+let idTaskNext = 0;
 
 menu.onclick = () => {
     if (
@@ -61,14 +62,16 @@ async function noImportant(event) {
         event.stopPropagation();
         let buttonNoImportant = event.target;
         buttonNoImportant = buttonNoImportant.parentNode;
+        console.log(buttonNoImportant);
         const buttonImportant =
-            buttonNoImportant.parentNode.querySelector('#important');
+            buttonNoImportant.parentNode.querySelector('.important');
         if (buttonImportant.classList.contains('hidden')) {
             buttonImportant.classList.remove('hidden');
             buttonNoImportant.classList.add('hidden');
 
             //Lấy ra task và id của task cần update
             let taskElement = buttonNoImportant.parentNode;
+            console.log(taskElement);
             while (!taskElement.classList.contains('content_mytask-item')) {
                 taskElement = taskElement.parentNode;
             }
@@ -91,7 +94,7 @@ async function important(event) {
         let buttonImportant = event.target;
         buttonImportant = buttonImportant.parentNode;
         const buttonNoImportant =
-            buttonImportant.parentNode.querySelector('#noimportant');
+            buttonImportant.parentNode.querySelector('.noimportant');
         if (buttonNoImportant.classList.contains('hidden')) {
             buttonNoImportant.classList.remove('hidden');
             buttonImportant.classList.add('hidden');
@@ -137,8 +140,8 @@ function playTinhTinh() {
             });
     }
 }
-const myTaskList = document.querySelector('.content_mytask-list');
 
+const myTaskList = document.querySelector('.content_mytask-list');
 function createTask(
     List,
     id,
@@ -151,16 +154,16 @@ function createTask(
     myTaskItem.setAttribute('data-index', id);
     myTaskItem.classList.add('content_mytask-item');
     myTaskItem.innerHTML = `  <div class="content_mytask-group">
-                                <button id="updatefinish" onclick="updatefinish(event)">
+                                <button class="updatefinish" onclick="updatefinish(event)">
                                     <i class="fi fi-rr-circle" id="finish-icon"></i>
                                 </button>
                                 <h4 class="content_mytask-title" onclick=" event.stopPropagation();">${name}</h4>
                             </div>
                             <div title="Đánh dấu công việc quan trọng">
-                               <button id="important" onclick="important(event)">
+                               <button class="important" onclick="important(event)">
                                    <i class="fi fi-rr-star"></i>
                                 </button>
-                                <button id="noimportant" class="hidden" onclick="noImportant(event)">
+                                <button class="noimportant hidden" onclick="noImportant(event)">
                                     <img src="./public/imgs/star.png">
                                 </button>
                             </div>
@@ -178,8 +181,8 @@ function createTask(
     myTaskItem.addEventListener('click', showDetailTask);
     myTaskItem.addEventListener('contextmenu', showButtonTask);
     if (important) {
-        myTaskItem.querySelector('#important').classList.add('hidden');
-        myTaskItem.querySelector('#noimportant').classList.remove('hidden');
+        myTaskItem.querySelector('.important').classList.add('hidden');
+        myTaskItem.querySelector('.noimportant').classList.remove('hidden');
     }
     List.prepend(myTaskItem);
 }
@@ -196,16 +199,16 @@ function createTaskFinish(
     myTaskItem.setAttribute('data-index', id);
     myTaskItem.classList.add('content_mytask-item');
     myTaskItem.innerHTML = `  <div class="content_mytask-group">
-                                <button id="not-update-finish" onclick="updateTaskNotFinish(event)">
+                                <button class="not-update-finish" onclick="updateTaskNotFinish(event)">
                                     <i class="fi fi-rr-check-circle"></i>
                                 </button>
                                 <h4 class="content_mytask-title" onclick=" event.stopPropagation();">${name}</h4>
                             </div>
                             <div title="Đánh dấu công việc quan trọng">
-                               <button id="important" onclick="important(event)">
+                               <button class="important" onclick="important(event)">
                                    <i class="fi fi-rr-star"></i>
                                 </button>
-                                <button id="noimportant" class="hidden" onclick="noImportant(event)">
+                                <button class="noimportant hidden" onclick="noImportant(event)">
                                     <img src="./public/imgs/star.png">
                                 </button>
                             </div>
@@ -224,8 +227,8 @@ function createTaskFinish(
     myTaskItem.addEventListener('contextmenu', showButtonTask);
     //Check task important ?
     if (important) {
-        myTaskItem.querySelector('#important').classList.add('hidden');
-        myTaskItem.querySelector('#noimportant').classList.remove('hidden');
+        myTaskItem.querySelector('.important').classList.add('hidden');
+        myTaskItem.querySelector('.noimportant').classList.remove('hidden');
     }
     List.prepend(myTaskItem);
 }
@@ -254,9 +257,6 @@ async function updatefinish(event) {
         }
         addTaskFinished(elementTask);
         let id = elementTask.getAttribute('data-index');
-        let name = elementTask.querySelector(
-            '.content_mytask-title',
-        ).textContent;
         //call API to server update status task
         await fetch(url + '/' + id, {
             method: 'PATCH',
@@ -283,9 +283,6 @@ async function updateTaskNotFinish(event) {
         addTaskNotFinish(elementTask);
         elementTask.remove();
         let id = elementTask.getAttribute('data-index');
-        let name = elementTask.querySelector(
-            '.content_mytask-title',
-        ).textContent;
         //Call API to server update status task
         await fetch(url + '/' + id, {
             method: 'PATCH',
@@ -305,10 +302,10 @@ formAddTask.onsubmit = async function (e) {
     try {
         const inputTaskElement = document.querySelector('#input_task');
         if (inputTaskElement.value) {
-            indexTask++;
-            createTask(myTaskList, indexTask, inputTaskElement.value);
+            idTask++;
+            createTask(myTaskList, idTask, inputTaskElement.value);
             const task = {
-                id: indexTask,
+                id: idTask,
                 name: inputTaskElement.value,
                 description: '',
                 important: false,
@@ -329,13 +326,7 @@ const closeFormDetailTask = formDetailTask.querySelector(
     '.detail_mytask-button>i',
 );
 
-const detailTaskTitle = formDetailTask.querySelector('.detail_mytask-title');
-
-function showDetailTask(event) {
-    const taskElement = event.target;
-    const taskTitle = taskElement.querySelector('.content_mytask-title');
-    detailTaskTitle.textContent = taskTitle.textContent;
-
+async function showDetailTask(event) {
     if (
         sidebar.classList.contains('hidden') &&
         content.classList.contains('content-10')
@@ -346,8 +337,110 @@ function showDetailTask(event) {
         content.classList.add('content-5');
     }
 
+    //show form detail task and listen events on form dateil task
     formDetailTask.classList.add('show');
     closeFormDetailTask.addEventListener('click', hiddenDetailTask);
+
+    //Lấy title,id của task và hiển thị lên UI
+    const detailTaskTitle = formDetailTask.querySelector(
+        '.detail_mytask-title',
+    );
+    const TaskElementInDetail = formDetailTask.querySelector(
+        '.detail_mytask-item',
+    );
+    const taskElement = event.target;
+    const id = taskElement.getAttribute('data-index');
+    const taskTitle = taskElement.querySelector('.content_mytask-title');
+    detailTaskTitle.textContent = taskTitle.textContent;
+    TaskElementInDetail.setAttribute(
+        'data-index',
+        taskElement.getAttribute('data-index'),
+    );
+
+    //List task next and call API để lấy dữ liệu của task đó.
+    let ListDetail = [];
+    await fetch(url + '/' + id)
+        .then(res => res.json())
+        .then(task => {
+            ListDetail = task.ListDetail;
+        })
+        .catch(err => console.log(err));
+    let idTaskDetail = ListDetail[ListDetail.length - 1]?.idTaskDetail || 0;
+    console.log(idTaskDetail);
+    //lấy ra form add task next và list task next
+    const formAddTaskNext = formDetailTask.querySelector('#form_mytask-next');
+    const listTaskNext = formDetailTask.querySelector(
+        '.detail_mytask-next-list',
+    );
+
+    //Show list task next to UI
+    ListDetail.forEach(task => {
+        console.log(task);
+        createTaskNext(listTaskNext, task.idTaskDetail, task.name, task.id);
+    });
+
+    //function add task next
+    function createTaskNext(list, idTaskDetail, name, id) {
+        const taskNext = document.createElement('div');
+        taskNext.classList.add('detail_mytask-next-item');
+        taskNext.setAttribute('data-target', idTask);
+        taskNext.setAttribute('data-index', idTaskDetail);
+        taskNext.innerHTML = ` <div class="detail_mytask-next-group">
+        <button class="detail_mytask-btn update-finish">
+        <i class="fi fi-rr-circle"></i>
+                                        </button>
+                                        <button class="detail_mytask-btn not-update-finish hidden">
+                                            <i class="fi fi-rr-check-circle"></i>
+                                        </button>
+                                        <h4 class="detail_mytask-next-title">
+                                            ${name}
+                                        </h4>
+                                    </div>
+                                    <button class="detail_mytask-btn delete">
+                                        <i class="fi fi-rr-cross-small"></i>
+                                    </button>`;
+        list.appendChild(taskNext);
+    }
+
+    //listen event click button add task next
+    const buttonAddTaskNext = formDetailTask.querySelector('#detail_task-add');
+    buttonAddTaskNext.addEventListener('click', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        const inputTaskNext = formAddTaskNext.querySelector('#input_task-next');
+        if (inputTaskNext.value) {
+            createTaskNext(
+                listTaskNext,
+                idTaskDetail,
+                inputTaskNext.value,
+                false,
+                id,
+            ); // add to UI
+            const taskDetail = {
+                idTaskDetail,
+                name: inputTaskNext.value,
+                status: false,
+                id,
+            };
+            idTaskDetail++;
+            ListDetail.push(taskDetail);
+            inputTaskNext.value = '';
+            console.log(ListDetail);
+        }
+    });
+
+    // //listen event submit form add task next
+    // formAddTaskNext.addEventListener('submit', async function (event) {
+    //     event.preventDefault();
+    //     await fetch(url + '/' + id, {
+    //         method: 'PUT',
+    //         header: {
+    //             'Content-Type': 'aplication/json'
+    //         },
+    //         body: JSON.stringify({ ListDetail })
+    //     });
+    //     alert('Them thành công');
+    // });
 }
 
 function hiddenDetailTask() {
@@ -463,7 +556,7 @@ window.addEventListener('load', async function () {
         const res = await fetch(url);
         const tasks = await res.json();
         if (tasks.length > 0) {
-            indexTask = tasks[tasks.length - 1].id;
+            idTask = tasks[tasks.length - 1].id;
         }
         //Lấy từng task trong db và hiển thị lên UI
         tasks.forEach(task => {
