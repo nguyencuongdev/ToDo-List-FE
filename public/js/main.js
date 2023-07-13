@@ -325,8 +325,31 @@ formAddTask.onsubmit = async function (e) {
 const closeFormDetailTask = formDetailTask.querySelector(
     '.detail_mytask-button>i',
 );
-
+//function add task next
+function createTaskNext(list, idTaskDetail, name, status = false, idOfTask) {
+    const taskNext = document.createElement('div');
+    taskNext.classList.add('detail_mytask-next-item');
+    taskNext.setAttribute('data-target', +idOfTask);
+    taskNext.setAttribute('data-index', idTaskDetail);
+    taskNext.innerHTML = ` <div class="detail_mytask-next-group">
+                                  <button class="detail_mytask-btn update-finish">
+                                        <i class="fi fi-rr-circle"></i>
+                                    </button>
+                                    <button class="detail_mytask-btn not-update-finish hidden">
+                                        <i class="fi fi-rr-check-circle"></i>
+                                    </button>
+                                    <h4 class="detail_mytask-next-title">${name}</h4>
+                                    </div>
+                                    <button class="detail_mytask-btn delete">
+                                        <i class="fi fi-rr-cross-small"></i>
+                                    </button>`;
+    list.appendChild(taskNext);
+}
+let ListDetail = [];
+const ListDetailTemp = [];
 async function showDetailTask(event) {
+    ListDetail = [];
+    //reponsive UI
     if (
         sidebar.classList.contains('hidden') &&
         content.classList.contains('content-10')
@@ -348,17 +371,19 @@ async function showDetailTask(event) {
     const TaskElementInDetail = formDetailTask.querySelector(
         '.detail_mytask-item',
     );
+
     const taskElement = event.target;
-    const id = taskElement.getAttribute('data-index');
-    const taskTitle = taskElement.querySelector('.content_mytask-title');
-    detailTaskTitle.textContent = taskTitle.textContent;
+    let id = +taskElement.getAttribute('data-index');
+    const title = taskElement.querySelector(
+        '.content_mytask-title',
+    )?.textContent;
+    detailTaskTitle.textContent = title;
     TaskElementInDetail.setAttribute(
         'data-index',
         taskElement.getAttribute('data-index'),
     );
 
-    //List task next and call API để lấy dữ liệu của task đó.
-    let ListDetail = [];
+    //all API để lấy dữ liệu của task đó.
     let description = '';
     await fetch(url + '/' + id)
         .then(res => res.json())
@@ -379,41 +404,31 @@ async function showDetailTask(event) {
 
     //Show list task next to UI
     ListDetail.forEach(task => {
-        createTaskNext(listTaskNext, task.idTaskDetail, task.name, task.id);
+        ListDetailTemp.push(task);
+        createTaskNext(
+            listTaskNext,
+            task.idTaskDetail,
+            task.name,
+            task.status,
+            task.id,
+        );
     });
 
     //Show description of task to UI
     const inputDescription = formAddTasksNext.querySelector('#description');
     inputDescription.value = description;
 
-    //function add task next
-    function createTaskNext(list, idTaskDetail, name, id) {
-        const taskNext = document.createElement('div');
-        taskNext.classList.add('detail_mytask-next-item');
-        taskNext.setAttribute('data-target', idTask);
-        taskNext.setAttribute('data-index', idTaskDetail);
-        taskNext.innerHTML = ` <div class="detail_mytask-next-group">
-        <button class="detail_mytask-btn update-finish">
-        <i class="fi fi-rr-circle"></i>
-                                        </button>
-                                        <button class="detail_mytask-btn not-update-finish hidden">
-                                            <i class="fi fi-rr-check-circle"></i>
-                                        </button>
-                                        <h4 class="detail_mytask-next-title">
-                                            ${name}
-                                        </h4>
-                                    </div>
-                                    <button class="detail_mytask-btn delete">
-                                        <i class="fi fi-rr-cross-small"></i>
-                                    </button>`;
-        list.appendChild(taskNext);
-    }
-
     //listen event click button add task next
     const buttonAddTaskNext = formDetailTask.querySelector('#detail_task-add');
-    buttonAddTaskNext.addEventListener('click', function (event) {
-        const inputTaskNext =
-            formAddTasksNext.querySelector('#input_task-next');
+    const inputTaskNext = formAddTasksNext.querySelector('#input_task-next');
+    const buttonResertDetailTask = formAddTasksNext.querySelector(
+        '.detail_mytask-cancel',
+    );
+
+    buttonAddTaskNext.addEventListener('click', handleClickAddTaskDetail);
+    buttonResertDetailTask.addEventListener('click', handleResertDetailTask);
+
+    function handleClickAddTaskDetail(event) {
         event.preventDefault();
         event.stopPropagation();
         if (inputTaskNext.value) {
@@ -434,9 +449,26 @@ async function showDetailTask(event) {
             ListDetail.push(taskDetail); // add to list Task next temp
             inputTaskNext.value = '';
         }
-    });
+    }
 
-    // listen event submit form add task next
+    function handleResertDetailTask(event) {
+        event.preventDefault();
+        listTaskNext.innerHTML = '';
+        ListDetailTemp.forEach((task, index) => {
+            createTaskNext(
+                listTaskNext,
+                task.idTaskDetail,
+                task.name,
+                task.status,
+                task.id,
+            );
+        });
+        ListDetail = ListDetailTemp;
+        inputDescription.value = description;
+        inputTaskNext.value = '';
+    }
+
+    // listen event save add tasks next in form
     formAddTasksNext.addEventListener('submit', async function (event) {
         try {
             event.preventDefault();
@@ -449,12 +481,15 @@ async function showDetailTask(event) {
                 }),
             });
             alert('Them thành công');
+            //giải phóng bộ nhớ
+            ListDetail = [];
+            ListDetailTemp = [];
         } catch (err) {
             alert('Lỗi thêm task next');
         }
     });
 }
-
+//function handle close form detail task
 function hiddenDetailTask() {
     if (
         !sidebar.classList.contains('hidden') &&
