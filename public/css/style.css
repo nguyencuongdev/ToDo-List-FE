@@ -375,7 +375,8 @@ ol {
 .content_mytask {
     overflow-y: auto;
     height: calc(100% - 78px - 97px);
-    padding-bottom: 60px;
+    padding-bottom: 80px;
+    margin-top: 10px;
 }
 
 .content_mytask::-webkit-scrollbar {
@@ -485,10 +486,8 @@ ol {
     margin-left: 8px;
 }
 
-.content_mytask-complate {
-    position: relative;
-}
-
+.content_mytask-overdue-title,
+.content_mytask-notcomplate-title,
 .content_mytask-complate-title {
     height: 52px;
     display: flex;
@@ -496,24 +495,18 @@ ol {
     border-bottom: 1px solid #ccc;
 }
 
+.content_mytask-overdue-title > h4,
+.content_mytask-notcomplate-title > h4,
 .content_mytask-complate-title > h4 {
     font-size: 1.4rem;
     margin-left: 8px;
 }
 
-.content_mytask-compate-list {
-    position: absolute;
-    width: 100%;
-    transition: transform 1s linear;
-}
-
+.content_mytask-list.hidden,
+.content_mytask-overdue-list.hidden,
 .content_mytask-compate-list.hidden {
     display: none;
     transform: translateY(-100%);
-}
-
-.content_mytask-compate-list > .content_mytask-item:last-child {
-    margin-bottom: 60px;
 }
 
 .detail {
@@ -923,5 +916,5 @@ ol {
 }
 
 .content-mytask-date-end {
-    color: red;
+    color: #facc15;
 }

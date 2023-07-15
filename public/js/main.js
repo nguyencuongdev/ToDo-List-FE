@@ -4,12 +4,18 @@ const content = document.querySelector('.content');
 const menu_hidden = document.querySelector('#menu_hidden');
 const url = '  http://localhost:3000/tasks';
 
+const myTaskList = document.querySelector('.content_mytask-list');
+const buttonShowTaskNotComplate = document.querySelector(
+    '.content_mytask-notcomplate-title',
+);
+
 const listTasksComplated = document.querySelector(
     '.content_mytask-compate-list',
 );
 const buttonShowTaskComlated = document.querySelector(
     '.content_mytask-complate-title',
 );
+
 const formDetailTask = document.querySelector('.detail');
 const showDateNow = document.querySelector('#showDateNow');
 const date = new Date(); // ngày tháng năm hiện tại
@@ -20,6 +26,7 @@ const audio = new Audio('/public/audios/tinhtinh.mp4');
 let day = '';
 let idTask = 0;
 let idTaskNext = 0;
+let countTaskFinish = 0;
 
 menu.onclick = () => {
     if (
@@ -55,6 +62,13 @@ buttonShowTaskComlated.onclick = () => {
 
 function ShowTaskFinished() {
     listTasksComplated.classList.toggle('hidden');
+}
+
+buttonShowTaskNotComplate.onclick = () => {
+    ShowTaskNotComplate();
+};
+function ShowTaskNotComplate() {
+    myTaskList.classList.toggle('hidden');
 }
 
 async function noImportant(event) {
@@ -141,7 +155,6 @@ function playTinhTinh() {
     }
 }
 
-const myTaskList = document.querySelector('.content_mytask-list');
 function createTask(List, task) {
     let myTaskItem = document.createElement('div');
     myTaskItem.setAttribute('data-index', task.id);

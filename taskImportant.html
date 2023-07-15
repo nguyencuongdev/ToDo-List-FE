@@ -28,7 +28,7 @@
             href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
         />
         <link rel="stylesheet" href="./public/css/style.css" />
-        <title>My task</title>
+        <title>Task important</title>
     </head>
 
     <body>
@@ -73,15 +73,13 @@
                     </div>
                     <ul class="sidebar_list">
                         <li class="sidebar_list-item">
-                            <a href="/" class="sidebar_list-link active">
+                            <a href="/index.html" class="sidebar_list-link">
                                 <i class="fi fi-rr-cloud-sun"></i>
                                 Ngày hôm nay
                             </a>
                         </li>
                         <li class="sidebar_list-item">
-                            <a
-                                href="/taskImportant.html"
-                                class="sidebar_list-link"
+                            <a href="/" class="sidebar_list-link active"
                                 ><i class="fi fi-rr-star"></i>
                                 Quan trọng
                             </a>
@@ -104,7 +102,7 @@
                             <div class="content_title-date-item">
                                 <div>
                                     <i class="fi fi-rr-cloud-sun"></i>
-                                    <h4>Ngày hôm nay</h4>
+                                    <h4>Tasks important</h4>
                                 </div>
                                 <div class="content_title-date-detail">
                                     <p
@@ -162,15 +160,17 @@
                         </form>
                     </div>
                     <div class="content_mytask">
-                        <div class="content_mytask-notcomplate-title">
-                            <img
-                                src="./public/imgs/angle-small-right.png"
-                                alt=""
-                            />
-                            <h4>Chưa hoàn thành</h4>
-                            <span id="count"></span>
+                        <div class="content_mytask-notcomplate">
+                            <div class="content_mytask-notcomplate-title">
+                                <img
+                                    src="./public/imgs/angle-small-right.png"
+                                    alt=""
+                                />
+                                <h4>Chưa hoàn thành</h4>
+                                <span id="count"></span>
+                            </div>
+                            <div class="content_mytask-list"></div>
                         </div>
-                        <div class="content_mytask-list"></div>
                         <div class="content_mytask-complate">
                             <div class="content_mytask-complate-title">
                                 <img
@@ -182,6 +182,19 @@
                             </div>
                             <div
                                 class="content_mytask-compate-list hidden"
+                            ></div>
+                        </div>
+                        <div class="content_mytask-overdue">
+                            <div class="content_mytask-overdue-title">
+                                <img
+                                    src="./public/imgs/angle-small-right.png"
+                                    alt=""
+                                />
+                                <h4>Quá hạn</h4>
+                                <span id="count"></span>
+                            </div>
+                            <div
+                                class="content_mytask-overdue-list hidden"
                             ></div>
                         </div>
                     </div>
@@ -338,7 +351,6 @@
                 enableTime: true,
                 dateFormat: 'd-m-Y H:i',
                 minDate: 'today',
-                maxDate: 'today',
                 time_24hr: true,
                 defaultDate: 'today',
                 locale: {
@@ -349,13 +361,27 @@
                 enableTime: true,
                 dateFormat: 'd-m-Y H:i',
                 minDate: 'today',
-                maxDate: 'today',
                 time_24hr: true,
                 defaultDate: 'today',
                 locale: {
                     firstDayOfWeek: 1, // start week on Monday
                 },
             });
+
+            const listTasksOverdue =
+                document.querySelector('.content_mytask-overdue-list') ?? false;
+            const buttonShowTasksoverdue =
+                document.querySelector('.content_mytask-overdue-title') ??
+                false;
+
+            if (buttonShowTasksoverdue) {
+                buttonShowTasksoverdue.onclick = () => {
+                    ShowTaskOverdue();
+                };
+                function ShowTaskOverdue() {
+                    listTasksOverdue.classList.toggle('hidden');
+                }
+            }
         </script>
     </body>
 </html>
