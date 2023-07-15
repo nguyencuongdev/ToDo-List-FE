@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- link style gg font -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600&display=swap"
+            rel="stylesheet"
+        />
+        <!-- link favicon -->
+        <link
+            rel="shortcut icon"
+            href="./public/imgs/favicon.png"
+            type="image/x-icon"
+        />
+        <!-- link style flation -->
+        <link
+            rel="stylesheet"
+            href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css"
+        />
+        <!-- link style flatpickr -->
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+        />
+        <link rel="stylesheet" href="./public/css/style.css" />
+        <title>Task important</title>
+    </head>
+
+    <body>
+        <div class="app">
+            <header class="header">
+                <div class="header_logo">
+                    <a href="">
+                        <img src="./public/imgs/to-do-list.png" alt="" />
+                        <h2>ToDo-List</h2>
+                    </a>
+                </div>
+                <div class="header_search">
+                    <input
+                        type="text"
+                        name="search"
+                        placeholder="Tìm kiếm"
+                        autocomplete="off"
+                    />
+                    <i class="fi fi-rr-search"></i>
+                </div>
+                <div class="header_user">
+                    <img src="./public/imgs/avatar.jpg" alt="" />
+                    <ul class="header_user-list">
+                        <li class="header_user-item">
+                            <a href="" class="header_user-link"
+                                >Tài khoản của tôi</a
+                            >
+                        </li>
+                        <li class="header_user-item hidden">
+                            <a href="" class="header_user-link">Đăng Nhập</a>
+                        </li>
+                        <li class="header_user-item">
+                            <a href="" class="header_user-link">Đăng xuất</a>
+                        </li>
+                    </ul>
+                </div>
+            </header>
+            <main class="container">
+                <nav class="sidebar" id="sidebar">
+                    <div class="icon">
+                        <i class="fi fi-rr-apps menu" id="menu"></i>
+                    </div>
+                    <ul class="sidebar_list">
+                        <li class="sidebar_list-item">
+                            <a href="/index.html" class="sidebar_list-link">
+                                <i class="fi fi-rr-cloud-sun"></i>
+                                Ngày hôm nay
+                            </a>
+                        </li>
+                        <li class="sidebar_list-item">
+                            <a href="/" class="sidebar_list-link active"
+                                ><i class="fi fi-rr-star"></i>
+                                Quan trọng
+                            </a>
+                        </li>
+                        <li class="sidebar_list-item">
+                            <a href="/allTasks.html" class="sidebar_list-link">
+                                <i class="fi fi-rr-home"></i>
+                                Tất cả công việc</a
+                            >
+                        </li>
+                    </ul>
+                </nav>
+                <div class="content">
+                    <div class="content_title">
+                        <div class="content_title-date">
+                            <i
+                                class="fi fi-rr-apps menu hidden"
+                                id="menu_hidden"
+                            ></i>
+                            <div class="content_title-date-item">
+                                <div>
+                                    <i class="fi fi-rr-star"></i>
+                                    <nav class="content-navigation">
+                                        <a
+                                            href="/taskImportant.html"
+                                            class="content-navigation-link"
+                                        >
+                                            Tasks important
+                                        </a>
+                                        <i
+                                            class="fi fi-rr-angle-small-right content-navigation-icon"
+                                        ></i>
+                                        <a
+                                            href="/"
+                                            class="content-navigation-link"
+                                        >
+                                            Task detail
+                                        </a>
+                                    </nav>
+                                </div>
+                                <div class="content_title-date-detail">
+                                    <p
+                                        style="margin: 6px 0 0 2px"
+                                        id="showDateNow"
+                                    >
+                                        Thứ 2, ngày 2 tháng 6, năm 2023
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content_name">
+                        <input
+                            type="text"
+                            name="name"
+                            placeholder="Tên công việc"
+                            class="content-name-text"
+                        />
+                    </div>
+                    <div class="content_decscription">
+                        <textarea
+                            name=""
+                            id=""
+                            cols="30"
+                            rows="10"
+                            class="content_description-text"
+                            placeholder="Mô tả công việc"
+                        ></textarea>
+                    </div>
+                    <div class="content_form">
+                        <form
+                            class="content_form-add-taskDetail"
+                            action=""
+                            method="post"
+                            id="form-add-task"
+                        >
+                            <div class="content_form-add-taskDetail-group">
+                                <i
+                                    class="fi fi-rr-circle content_form-add-taskDetail-icon"
+                                ></i>
+                                <input
+                                    autocomplete="off"
+                                    class="content_form-add-taskDetail-input"
+                                    name="name"
+                                    placeholder="Thêm công việc chi tiết"
+                                    type="text"
+                                />
+                            </div>
+                            <input
+                                type="submit"
+                                value="Thêm"
+                                class="btn btn-submit"
+                            />
+                        </form>
+                    </div>
+                    <div class="content_detail">
+                        <div class="content_detail-title">
+                            <img
+                                src="./public/imgs/angle-small-right.png"
+                                alt=""
+                            />
+                            <h4>Danh sách công việc chi tiết</h4>
+                            <span id="countDetail">2</span>
+                        </div>
+                        <div class="content_detail-list">
+                            <div class="content_detail-item">
+                                <p class="content_detail-name">Đi học</p>
+                                <div class="content_detail-action">
+                                    <button
+                                        class="content_detail-finish content_detail-btn"
+                                    >
+                                        <i class="fi fi-rr-check"></i>
+                                    </button>
+                                    <button
+                                        class="content_detail-delete content_detail-btn"
+                                    >
+                                        <i class="fi fi-rr-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="content_detail-item">
+                                <p class="content_detail-name">Đi học</p>
+                                <div class="content_detail-action">
+                                    <button
+                                        class="content_detail-finish content_detail-btn"
+                                    >
+                                        <i class="fi fi-rr-check"></i>
+                                    </button>
+                                    <button
+                                        class="content_detail-delete content_detail-btn"
+                                    >
+                                        <i class="fi fi-rr-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="content_detail-item">
+                                <p class="content_detail-name">Đi học</p>
+                                <div class="content_detail-action">
+                                    <button
+                                        class="content_detail-finish content_detail-btn"
+                                    >
+                                        <i class="fi fi-rr-check"></i>
+                                    </button>
+                                    <button
+                                        class="content_detail-delete content_detail-btn"
+                                    >
+                                        <i class="fi fi-rr-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </body>
+</html>

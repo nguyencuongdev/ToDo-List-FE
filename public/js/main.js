@@ -16,10 +16,11 @@ const buttonShowTaskComlated = document.querySelector(
     '.content_mytask-complate-title',
 );
 
-const ShowNumberTaskComplate = document.querySelector('#countTaskFinish');
-const ShowNumberTaskNotComplate = document.querySelector('#countTaskNotFinish');
-console.log(ShowNumberTaskComplate);
-console.log(ShowNumberTaskNotComplate);
+const ShowNumberTaskComplate =
+    buttonShowTaskComlated.querySelector('#countTaskFinish');
+const ShowNumberTaskNotComplate = buttonShowTaskNotComplate.querySelector(
+    '#countTaskNotFinish',
+);
 let countTaskComplate = 0;
 let countTaskNotComplate = 0;
 
