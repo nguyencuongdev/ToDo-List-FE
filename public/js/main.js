@@ -142,32 +142,35 @@ function playTinhTinh() {
 }
 
 const myTaskList = document.querySelector('.content_mytask-list');
-function createTask(
-    List,
-    id,
-    name,
-    description = '',
-    important = false,
-    status = false,
-) {
+function createTask(List, task) {
     let myTaskItem = document.createElement('div');
-    myTaskItem.setAttribute('data-index', id);
+    myTaskItem.setAttribute('data-index', task.id);
+    myTaskItem.setAttribute('important', task.important);
     myTaskItem.classList.add('content_mytask-item');
     myTaskItem.innerHTML = `  <div class="content_mytask-group">
                                 <button class="updatefinish" onclick="updatefinish(event)">
                                     <i class="fi fi-rr-circle" id="finish-icon"></i>
                                 </button>
-                                <h4 class="content_mytask-title" onclick=" event.stopPropagation();">${name}</h4>
+                                <h4 class="content_mytask-title" onclick=" event.stopPropagation();">${task.name}</h4>
+                            </div>
+                            <div class="content_mytask-date">
+                                <span class="content-mytask-date-start content-mytask-date-item">
+                                  ${task.startDate}
+                                </span>
+                                <span class="content-mytask-divider">/</span>
+                                <span class="content-mytask-date-end content-mytask-date-item">
+                                   ${task.endDate}
+                                </span>
                             </div>
                             <div title="Đánh dấu công việc quan trọng">
-                               <button class="important" onclick="important(event)">
-                                   <i class="fi fi-rr-star"></i>
+                                <button class="important" onclick="important(event)">
+                                    <i class="fi fi-rr-star"></i>
                                 </button>
                                 <button class="noimportant hidden" onclick="noImportant(event)">
                                     <img src="./public/imgs/star.png">
                                 </button>
                             </div>
-                             <div class="content_mytask-item-button">
+                            <div class="content_mytask-item-button">
                                 <button class="content_mytask-button-item edit" onclick="editTask(event)">
                                     Sửa task
                                     <i class="fi fi-rr-edit"></i>
@@ -176,33 +179,35 @@ function createTask(
                                     Xóa task
                                     <i class="fi fi-rr-trash"></i>
                                 </button>
-                                </div>
                             </div>`;
     myTaskItem.addEventListener('click', showDetailTask);
     myTaskItem.addEventListener('contextmenu', showButtonTask);
-    if (important) {
+    if (task.important) {
         myTaskItem.querySelector('.important').classList.add('hidden');
         myTaskItem.querySelector('.noimportant').classList.remove('hidden');
     }
     List.prepend(myTaskItem);
 }
 
-function createTaskFinish(
-    List,
-    id,
-    name,
-    description = '',
-    important = false,
-    status = false,
-) {
+function createTaskFinish(List, task) {
     let myTaskItem = document.createElement('div');
-    myTaskItem.setAttribute('data-index', id);
+    myTaskItem.setAttribute('data-index', task.id);
+    myTaskItem.setAttribute('important', task.important);
     myTaskItem.classList.add('content_mytask-item');
     myTaskItem.innerHTML = `  <div class="content_mytask-group">
                                 <button class="not-update-finish" onclick="updateTaskNotFinish(event)">
                                     <i class="fi fi-rr-check-circle"></i>
                                 </button>
-                                <h4 class="content_mytask-title" onclick=" event.stopPropagation();">${name}</h4>
+                                <h4 class="content_mytask-title" onclick=" event.stopPropagation();">${task.name}</h4>
+                            </div>
+                            <div class="content_mytask-date">
+                                <span class="content-mytask-date-start content-mytask-date-item">
+                                    ${task.startDate}
+                                </span>
+                                <span class="content-mytask-divider">/</span>
+                                <span class="content-mytask-date-end content-mytask-date-item">
+                                    ${task.endDate}
+                                </span>
                             </div>
                             <div title="Đánh dấu công việc quan trọng">
                                <button class="important" onclick="important(event)">
@@ -226,7 +231,7 @@ function createTaskFinish(
     myTaskItem.addEventListener('click', showDetailTask);
     myTaskItem.addEventListener('contextmenu', showButtonTask);
     //Check task important ?
-    if (important) {
+    if (task.important) {
         myTaskItem.querySelector('.important').classList.add('hidden');
         myTaskItem.querySelector('.noimportant').classList.remove('hidden');
     }
@@ -234,17 +239,35 @@ function createTaskFinish(
 }
 
 function addTaskFinished(element) {
+    let id = element.getAttribute('data-index');
     const name = element.querySelector('.content_mytask-title').textContent;
-    const id = element.getAttribute('data-index');
-    createTaskFinish(listTasksComplated, id, name);
+    const important = element.getAttribute('important');
+    const startDate =
+        element.querySelector('.content-mytask-date-start')?.value ??
+        Date.now();
+    const endDate =
+        element.querySelector('.content-mytask-date-end')?.value ?? Date.now();
+    createTaskFinish(listTasksComplated, {
+        id,
+        name,
+        important,
+        startDate,
+        endDate,
+    });
     listTasksComplated.classList.remove('hidden');
     playTinhTinh();
 }
 
 function addTaskNotFinish(element) {
-    const task = element.querySelector('.content_mytask-title');
     let id = element.getAttribute('data-index');
-    createTask(myTaskList, id, task.textContent);
+    const name = element.querySelector('.content_mytask-title').textContent;
+    const important = element.getAttribute('important');
+    const startDate =
+        element.querySelector('.content-mytask-date-start')?.value ??
+        Date.now();
+    const endDate =
+        element.querySelector('.content-mytask-date-end')?.value ?? Date.now();
+    createTask(myTaskList, { id, name, important, startDate, endDate });
 }
 
 async function updatefinish(event) {
@@ -301,16 +324,20 @@ formAddTask.onsubmit = async function (e) {
     e.preventDefault();
     try {
         const inputTaskElement = document.querySelector('#input_task');
+        const inputStartDate = document.querySelector('#date-start');
+        const inputEndDate = document.querySelector('#date-end');
         if (inputTaskElement.value) {
             idTask++;
-            createTask(myTaskList, idTask, inputTaskElement.value); //create task on UI
             const task = {
                 id: idTask,
                 name: inputTaskElement.value,
                 description: '',
                 important: false,
                 status: false,
+                startDate: inputStartDate.value,
+                endDate: inputEndDate.value,
             };
+            createTask(myTaskList, task); //create task on UI
             await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -608,20 +635,8 @@ window.addEventListener('load', async function () {
         //Lấy từng task trong db và hiển thị lên UI
         tasks.forEach(task => {
             task.status
-                ? createTaskFinish(
-                      listTasksComplated,
-                      task.id,
-                      task.name,
-                      false,
-                      task.important,
-                  )
-                : createTask(
-                      myTaskList,
-                      task.id,
-                      task.name,
-                      false,
-                      task.important,
-                  );
+                ? createTaskFinish(listTasksComplated, task)
+                : createTask(myTaskList, task);
         });
     } catch (err) {
         console.log(err);

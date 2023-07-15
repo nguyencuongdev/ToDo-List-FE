@@ -6,6 +6,8 @@
             "description": "",
             "important": true,
             "status": true,
+            "startDate": "15-07-2023 00:00",
+            "endDate": "15-07-2023 00:00",
             "ListDetail": []
         },
         {
@@ -14,6 +16,8 @@
             "description": "",
             "important": true,
             "status": true,
+            "startDate": "15-07-2023 00:00",
+            "endDate": "15-07-2023 00:00",
             "ListDetail": []
         },
         {
@@ -22,6 +26,8 @@
             "description": "",
             "important": true,
             "status": true,
+            "startDate": "15-07-2023 00:00",
+            "endDate": "15-07-2023 00:00",
             "ListDetail": []
         },
         {
@@ -30,6 +36,8 @@
             "description": "",
             "important": true,
             "status": false,
+            "startDate": "15-07-2023 00:00",
+            "endDate": "15-07-2023 00:00",
             "ListDetail": [
                 {
                     "idTaskDetail": 1,
@@ -51,6 +59,8 @@
             "description": "TypeJS là ngôn ngữ được xây dựng trên JS giúp code JS trở nên chặt chẽ hơn",
             "important": true,
             "status": false,
+            "startDate": "15-07-2023 00:00",
+            "endDate": "15-07-2023 00:00",
             "ListDetail": [
                 {
                     "idTaskDetail": 1,
@@ -78,6 +88,8 @@
             "description": "ToDo_List BE sẽ trả về 1 API cho FE",
             "important": false,
             "status": false,
+            "startDate": "15-07-2023 00:00",
+            "endDate": "15-07-2023 00:00",
             "ListDetail": [
                 {
                     "idTaskDetail": 1,
@@ -99,6 +111,8 @@
             "description": "HEHE",
             "important": true,
             "status": true,
+            "startDate": "15-07-2023 00:00",
+            "endDate": "15-07-2023 00:00",
             "ListDetail": [
                 {
                     "id": 13,
@@ -113,6 +127,15 @@
                     "status": false
                 }
             ]
+        },
+        {
+            "id": 14,
+            "name": "tv 1",
+            "description": "",
+            "important": false,
+            "status": false,
+            "startDate": "15-07-2023 16:00",
+            "endDate": "15-07-2023 20:00"
         }
     ]
 }

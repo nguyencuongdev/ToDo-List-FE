@@ -4,22 +4,28 @@
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- link style gg font -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
             href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600&display=swap"
             rel="stylesheet"
         />
+        <!-- link favicon -->
         <link
             rel="shortcut icon"
             href="./public/imgs/favicon.png"
             type="image/x-icon"
         />
-        <!-- <link rel="stylesheet" href="./public/font/uicons-regular-rounded/css/uicons-regular-rounded.css">
-     -->
+        <!-- link style flation -->
         <link
             rel="stylesheet"
             href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css"
+        />
+        <!-- link style flatpickr -->
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
         />
         <link rel="stylesheet" href="./public/css/style.css" />
         <title>My task</title>
@@ -127,8 +133,27 @@
                                 />
                             </div>
                             <div class="content_groud-addd-button">
-                                <div>
-                                    <input type="date" name="date" id="date" />
+                                <div class="content_group-date">
+                                    <div
+                                        class="content_group-date-item content-date-start"
+                                    >
+                                        <label for="">Ngày bắt đầu: </label>
+                                        <input
+                                            type="date"
+                                            name="date"
+                                            id="date-start"
+                                        />
+                                    </div>
+                                    <div
+                                        class="content_group-date-item content-date-end"
+                                    >
+                                        <label for="">Ngày kết thúc </label>
+                                        <input
+                                            type="date"
+                                            name="date"
+                                            id="date-end"
+                                        />
+                                    </div>
                                 </div>
                                 <input type="submit" value="Thêm" id="add" />
                             </div>
@@ -296,6 +321,31 @@
                 </form>
             </div>
         </div>
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
         <script src="./public/js/main.js"></script>
+        <script>
+            const startDate = flatpickr('#date-start', {
+                enableTime: true,
+                dateFormat: 'd-m-Y H:i',
+                minDate: 'today',
+                maxDate: 'today',
+                time_24hr: true,
+                defaultDate: 'today',
+                locale: {
+                    firstDayOfWeek: 1, // start week on Monday
+                },
+            });
+            const endDate = flatpickr('#date-end', {
+                enableTime: true,
+                dateFormat: 'd-m-Y H:i',
+                minDate: 'today',
+                maxDate: 'today',
+                time_24hr: true,
+                defaultDate: 'today',
+                locale: {
+                    firstDayOfWeek: 1, // start week on Monday
+                },
+            });
+        </script>
     </body>
 </html>
