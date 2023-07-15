@@ -16,6 +16,13 @@ const buttonShowTaskComlated = document.querySelector(
     '.content_mytask-complate-title',
 );
 
+const ShowNumberTaskComplate = document.querySelector('#countTaskFinish');
+const ShowNumberTaskNotComplate = document.querySelector('#countTaskNotFinish');
+console.log(ShowNumberTaskComplate);
+console.log(ShowNumberTaskNotComplate);
+let countTaskComplate = 0;
+let countTaskNotComplate = 0;
+
 const formDetailTask = document.querySelector('.detail');
 const showDateNow = document.querySelector('#showDateNow');
 const date = new Date(); // ngày tháng năm hiện tại
@@ -647,9 +654,15 @@ window.addEventListener('load', async function () {
         }
         //Lấy từng task trong db và hiển thị lên UI
         tasks.forEach(task => {
-            task.status
-                ? createTaskFinish(listTasksComplated, task)
-                : createTask(myTaskList, task);
+            if (task.status) {
+                createTaskFinish(listTasksComplated, task);
+                countTaskFinish++;
+                ShowNumberTaskComplate.textContent = countTaskFinish;
+            } else {
+                createTask(myTaskList, task);
+                countTaskNotComplate++;
+                ShowNumberTaskNotComplate.textContent = countTaskNotComplate;
+            }
         });
     } catch (err) {
         console.log(err);
