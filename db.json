@@ -86,7 +86,7 @@
             "id": 11,
             "name": "Todo_List BE",
             "description": "ToDo_List BE sẽ trả về 1 API cho FE",
-            "important": false,
+            "important": true,
             "status": false,
             "startDate": "15-07-2023 00:00",
             "endDate": "15-07-2023 00:00",
@@ -107,8 +107,8 @@
         },
         {
             "id": 13,
-            "name": "Working ToDo-List FE",
-            "description": "HEHE",
+            "name": "Working ToDo_List Fe",
+            "description": "Nỗ lực để trở thàteh 1 phiên bản tốt hơn",
             "important": true,
             "status": true,
             "startDate": "15-07-2023 00:00",
@@ -136,60 +136,6 @@
             "status": false,
             "startDate": "15-07-2023 20:00",
             "endDate": "15-07-2023 23:00"
-        },
-        {
-            "id": 15,
-            "name": "test 1",
-            "description": "",
-            "important": false,
-            "status": false,
-            "startDate": "15-07-2023 00:00",
-            "endDate": "15-07-2023 00:00"
-        },
-        {
-            "id": 16,
-            "name": "test 2",
-            "description": "",
-            "important": false,
-            "status": false,
-            "startDate": "15-07-2023 00:00",
-            "endDate": "15-07-2023 00:00"
-        },
-        {
-            "id": 17,
-            "name": "test 3",
-            "description": "",
-            "important": false,
-            "status": false,
-            "startDate": "15-07-2023 00:00",
-            "endDate": "15-07-2023 00:00"
-        },
-        {
-            "id": 18,
-            "name": "test 4",
-            "description": "",
-            "important": false,
-            "status": false,
-            "startDate": "15-07-2023 00:00",
-            "endDate": "15-07-2023 00:00"
-        },
-        {
-            "id": 19,
-            "name": "test 5",
-            "description": "",
-            "important": false,
-            "status": false,
-            "startDate": "15-07-2023 00:00",
-            "endDate": "15-07-2023 00:00"
-        },
-        {
-            "id": 20,
-            "name": "test 6",
-            "description": "",
-            "important": false,
-            "status": false,
-            "startDate": "15-07-2023 00:00",
-            "endDate": "15-07-2023 00:00"
         }
     ]
 }
